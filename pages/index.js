@@ -9,7 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import PaginatedItems from '../components/Product/Product';
 import Footer from '../components/Footer/IntroduceInfo.js'
 import config from '/public/config.json'
-
+import {readData} from '/public/store/ProductState'
 
 
 export default function Home() {
