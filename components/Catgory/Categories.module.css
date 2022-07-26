@@ -1,0 +1,32 @@
+.container {
+
+    width: 100%;
+} 
+
+.listCategories {
+    margin: 5px auto;
+    max-width: 1200px;
+   
+    background: var(--third-color);
+    
+}
+
+.item { 
+    padding: 0 17px; 
+    border-right: 5px solid var(--primary-color) !important;
+    margin: 0;
+    text-align: center;
+}
+
+.item:last-child {
+    border-right: none;
+}
+
+.iconTypo {
+    font-size: 17px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+}

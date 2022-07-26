@@ -1,0 +1,36 @@
+.container {
+    width: 100%;
+    background: var(--secondary-background);
+    
+}
+.intro {
+    margin: 5px auto;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    
+    align-items: center;
+
+}
+
+.info {
+    font-weight: bold;
+}
+
+.highlight_text {
+    background: none;
+    
+    color: var(--third-color);
+
+}
+
+.authenticate_field {
+    margin: 0 0.5rem;
+}
+
+.authenticate_button {
+    font-weight: bold;
+    background: var(--third-color);
+    
+}
+

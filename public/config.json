@@ -1,0 +1,9 @@
+{
+    "NEO4J_DB_CONFIG": {
+        "PATH": "neo4j+s://3fbf15b4.databases.neo4j.io",
+        "USERNAME": "neo4j",
+        "PASSWORD": "MVAfvD9JFZTONsiflsvMJLEAS8STq2OoGBjfpGyp0IM",
+        "AURA_INSTANCENAME":"Tambolu_web"
+    },
+    "API_URL":"https://tambolu-app.herokuapp.com/api/tambolu-api"
+}

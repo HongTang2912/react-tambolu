@@ -1,0 +1,45 @@
+.container {
+    width: 100%;
+    background: #222;
+    margin-top: 20px;
+}
+.intro {
+    margin: 5px auto;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    
+    align-items: flex-start;
+
+}
+
+.info {
+    font-weight: bold;
+    color: #eee;
+}
+
+.info > p {
+    margin-top: 3px;
+    margin-bottom:0;
+}
+
+.highlight_text {
+    background: none;
+    color: var(--third-color);
+}
+
+.highlight_text_red {
+    background: none;
+    color: #ee3030;
+}
+
+.authenticate_field {
+    margin: 0 0.5rem;
+}
+
+.authenticate_button {
+    font-weight: bold;
+    background: var(--third-color);
+    
+}
+
