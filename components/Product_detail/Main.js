@@ -25,10 +25,7 @@ import {
 export default function ProductDetail({product}) {
     
     const [open, setOpen] = React.useState(false);
-    const [ratingPoint, setRatingPoint] = React.useState([
-        10, 8, 6, 4, 2
-    ])
-
+    const [ratingPoint, setRatingPoint] = React.useState(product?.rating_point ?? [0])
     const product_description = useSpring({
        height: open ? 220 : 0,
        
@@ -78,7 +75,7 @@ export default function ProductDetail({product}) {
                              <AiFillStar/>
                          </div>
                 
-                         <strong className="views">342 <b className="text-yellow-400">Lượt xem</b></strong>
+                         <strong className="views">{product?.views} <b className="text-yellow-400">Lượt xem</b></strong>
                      </div>
                      <div className="prices">
                          <span className="price text-red-400 text-3xl">
