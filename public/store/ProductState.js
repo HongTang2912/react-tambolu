@@ -48,14 +48,7 @@ export const getQueryByTitle = async(pd_title) => {
       )
       if (data?.records[0]?._fields[0]?.properties){
           let prod = data?.records[0]?._fields[0]?.properties
-          return {
-              id: prod.id,
-              title: prod.title,
-              price: prod.price,
-              status: prod.status,
-              imgSrc: "https://linhkienlammusic.com/thumbs/600x600x2"+prod.imgSrc.slice(45),
-              refund: prod.refund
-          }
+          return prod
       }
   }
   catch(err) {
