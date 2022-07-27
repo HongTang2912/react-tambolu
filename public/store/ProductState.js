@@ -41,7 +41,7 @@ export const getQueryByTitle = async(pd_title) => {
   const session = driver.session()
   try{
       const data = await session.run(
-          `MATCH (n:Product {id: $id}) return n`,
+          `MATCH (n:Product {id: $id}), (m:Product {id: $id}) return n,m`,
           {
           id: pd_title
           }
