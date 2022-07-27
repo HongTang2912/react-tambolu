@@ -21,6 +21,7 @@ export default function Home() {
    
 
     const [product, setProduct] = useState({
+        rating_point: [0]
         title: pd_title,
         imgSrc: "https://dominionmartialarts.com/wp-content/uploads/2017/04/default-image.jpg"
     });
