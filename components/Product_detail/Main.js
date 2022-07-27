@@ -25,7 +25,7 @@ import {
 export default function ProductDetail({product}) {
     
     const [open, setOpen] = React.useState(false);
-    const [ratingPoint, setRatingPoint] = React.useState(product?.rating_point ?? [0])
+    const [ratingPoint, setRatingPoint] = React.useState(product?.rating_point)
     const product_description = useSpring({
        height: open ? 220 : 0,
        
@@ -33,12 +33,12 @@ export default function ProductDetail({product}) {
 
     const RatioOfRatingPoint = (point) => {
          console.log(product);
-        return (point / ratingPoint.reduce((sum, i) => sum + i, 0) * 100)
+        return (point / ratingPoint?.reduce((sum, i) => sum + i, 0) * 100)
     }
     const AvgRatingPoint = () => {
-        return  ratingPoint.reduce((sum, i, index) => {
+        return  ratingPoint?.reduce((sum, i, index) => {
             return sum + i*(5-index);
-        }, 0)/ratingPoint.reduce((sum, i) => sum + i, 0)
+        }, 0)/ratingPoint?.reduce((sum, i) => sum + i, 0)
     }
 
 
