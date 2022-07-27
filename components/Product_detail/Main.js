@@ -30,6 +30,10 @@ export default function ProductDetail({product}) {
        height: open ? 220 : 0,
        
     })
+    
+    React.useLayoutEffect(() => {
+        setRatingPoint(product?.rating_point)
+    },[product])
 
     const RatioOfRatingPoint = (point) => {
          console.log(product);
