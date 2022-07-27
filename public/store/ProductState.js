@@ -54,7 +54,7 @@ export const getQueryByTitle = async(pd_title) => {
       )
       
       if (data?.records[0]?._fields[0]?.properties){
-          let prod = {...data?.records[0]?._fields[0]?.properties, ...data2?.records[0]?._fields[0]?.properties)
+          let prod = {...data?.records[0]?._fields[0]?.properties, ...data2?.records[0]?._fields[0]?.properties}
           return prod
       }
   }
