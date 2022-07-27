@@ -32,6 +32,7 @@ export default function ProductDetail({product}) {
     })
 
     const RatioOfRatingPoint = (point) => {
+         console.log(ratingPoint);
         return (point / ratingPoint.reduce((sum, i) => sum + i, 0) * 100)
     }
     const AvgRatingPoint = () => {
