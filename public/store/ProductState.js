@@ -68,3 +68,27 @@ export const getQueryByTitle = async(pd_title) => {
 
 }
 
+export const getCommentById = async(ids) => {
+  const driver = neo4j.driver(PATH, neo4j.auth.basic(USERNAME, PASSWORD))
+  const session = driver.session()
+  try{
+    let list = []
+    for (var i = 0; i < ids.length; i++){
+      const data = await session.run(
+          `match (c: Comment) where ID(c) = $id return c.content`,
+          {
+          id: ids[i].low
+          }
+      )
+      list.push(data?.records[0]?._fields[0])
+    }
+    return list
+  }
+  catch(err) {
+      await console.error(err)
+  }
+  finally {
+      await session.close()
+  }
+  await driver.close()
+}

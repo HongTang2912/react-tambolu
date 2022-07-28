@@ -13,36 +13,45 @@ import {
     FormLabel,
     OutlinedInput,
     IconButton,
+    Button,
     Box,
     LinearProgress
 } from "@mui/material"
 import {
     VisibilityOff,
     Visibility,
+    SendIcon
 } from "@mui/icons-material"
+import {getCommentById} from '/public/store/ProductState'
+
 
 
 export default function ProductDetail({product}) {
-    
+
+    const [point, setPoint] = React.useState(5)
+    const [comment, setComment] = React.useState("")
     const [open, setOpen] = React.useState(false);
-    const [ratingPoint, setRatingPoint] = React.useState(product?.rating_point)
+
+
     const product_description = useSpring({
        height: open ? 220 : 0,
        
     })
-    
-    React.useLayoutEffect(() => {
-        setRatingPoint(product?.rating_point)
-    },[product])
 
+    React.useEffect(() => {
+        getCommentById(product?.comment_id).then(res => {
+            console.log(res)
+        })
+    },[product])
+    
     const RatioOfRatingPoint = (point) => {
-         console.log(product);
-        return (point / ratingPoint?.reduce((sum, i) => sum + i, 0) * 100)
+
+        return (point / product?.rating_point?.reduce((sum, i) => sum + i, 0) * 100)
     }
     const AvgRatingPoint = () => {
-        return  ratingPoint?.reduce((sum, i, index) => {
+        return product?.rating_point?.reduce((sum, i, index) => {
             return sum + i*(5-index);
-        }, 0)/ratingPoint?.reduce((sum, i) => sum + i, 0)
+        }, 0)/product?.rating_point?.reduce((sum, i) => sum + i, 0)
     }
 
 
@@ -51,7 +60,22 @@ export default function ProductDetail({product}) {
        
     };
 
-    
+    const handleSetRatingPoint = (ev) => {
+        setPoint(ev.target.value)
+        console.log(ev.target.value)
+    }
+
+    const handlesetComment = (ev) => {
+        setComment(ev.target.value)
+        console.log(ev.target.value)
+    }
+
+    const handleClickSubmit = () => {
+        console.log({
+            point: point,
+            comment: comment
+        })
+    }
 
     return (    
         <div className="products-container">
@@ -137,6 +161,7 @@ export default function ProductDetail({product}) {
                     defaultValue=""
                     variant="standard"
                     className="w-full"
+                    onChange={(ev) => handlesetComment(ev)}
                     endAdornment={
                         <InputAdornment position="end">
                             <IconButton
@@ -154,6 +179,7 @@ export default function ProductDetail({product}) {
                     <FormControl className="text-xs container:text-xl">
                         <FormLabel id="demo-radio-buttons-group-label">Đánh giá</FormLabel>
                         <RadioGroup
+                            onChange={(ev)=>handleSetRatingPoint(ev)}
                             aria-labelledby="demo-radio-buttons-group-label"
                             defaultValue="5"
                             name="radio-buttons-group"
@@ -234,45 +260,53 @@ export default function ProductDetail({product}) {
                             <h1 className="font-bold md:text-6xl text-5xl inline">
                                 {AvgRatingPoint().toFixed(1)}
                             </h1>
-                            <h1 className="text-center">({ratingPoint.reduce((sum, i) => sum + i)})</h1>
+                            <h1 className="text-center">({product?.rating_point?.reduce((sum, i) => sum + i)})</h1>
                         </div>
                         <div className="w-64 py-3">
                             
                             <LinearProgress 
                                 className="py-2 my-2" 
                                 variant="buffer" 
-                                value={RatioOfRatingPoint(ratingPoint[0])}  
+                                valueBuffer={0} 
+                                value={RatioOfRatingPoint(product?.rating_point[0])}  
                             />
                             <LinearProgress 
                                 className="py-2 my-2" 
                                 variant="buffer" 
-                                value={RatioOfRatingPoint(ratingPoint[1])}  
+                                valueBuffer={0} 
+                                value={RatioOfRatingPoint(product?.rating_point[1])}  
                             />
                             <LinearProgress 
                                 className="py-2 my-2" 
                                 variant="buffer" 
-                                value={RatioOfRatingPoint(ratingPoint[2])}  
+                                valueBuffer={0} 
+                                value={RatioOfRatingPoint(product?.rating_point[2])}  
                             />
                             <LinearProgress 
                                 className="py-2 my-2" 
-                                variant="buffer" 
-                                value={RatioOfRatingPoint(ratingPoint[3])}  
+                                variant="buffer"
+                                valueBuffer={0}  
+                                value={RatioOfRatingPoint(product?.rating_point[3])}  
                             />
                             <LinearProgress 
                                 className="py-2 my-2" 
-                                variant="buffer" 
-                                value={RatioOfRatingPoint(ratingPoint[4])}  
+                                variant="buffer"
+                                valueBuffer={0} 
+                                value={RatioOfRatingPoint(product?.rating_point[4])}  
                             />
                         </div>
                         <div className="leading-6 text-right px-2">
-                            <p>{ratingPoint[0]}</p>
-                            <p>{ratingPoint[1]}</p>
-                            <p>{ratingPoint[2]}</p>
-                            <p>{ratingPoint[3]}</p>
-                            <p>{ratingPoint[4]}</p>
+                            <p>{product?.rating_point[0]}</p>
+                            <p>{product?.rating_point[1]}</p>
+                            <p>{product?.rating_point[2]}</p>
+                            <p>{product?.rating_point[3]}</p>
+                            <p>{product?.rating_point[4]}</p>
                         </div>
                     </FormControl>
                 </div>
+                <Button variant="contained" onClick={handleClickSubmit}>
+                    Send
+                </Button>
             </Box>
         </div>
     )
