@@ -23,6 +23,7 @@ import {
     SendIcon
 } from "@mui/icons-material"
 import {getCommentById} from '/public/store/ProductState'
+import CommentBlock from './CommentBlock'
 
 
 
@@ -304,10 +305,11 @@ export default function ProductDetail({product}) {
                         </div>
                     </FormControl>
                 </div>
-                <Button variant="contained" onClick={handleClickSubmit}>
-                    Send
-                </Button>
+            <Button variant="contained" onClick={handleClickSubmit}>
+                Send
+            </Button>
             </Box>
+            <CommentBlock/>
         </div>
     )
 }

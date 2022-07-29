@@ -18,7 +18,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   useEffect(() => {
 
-      readData().then(res => {setProducts(res)}) 
+      readData().then(res => {console.log(res); setProducts(res)}) 
   }, [])
 
 

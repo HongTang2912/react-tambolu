@@ -4,6 +4,7 @@ import {animated, useSpring} from 'react-spring'
 import Button from '@mui/material/Button';
 import Link from 'next/link'
 import { Pagination } from '@mui/material';
+import Image from 'next/image'
 import ReactPaginate from 'react-paginate';
 
 function Items({ currentItems }) {
