@@ -10,7 +10,7 @@ import {getCommentById} from '/public/store/ProductState'
 export default function CommentBlock({comment_id}) {
     return (
       {
-        getCommentById(comment_id ?? []).then(res => 
+        getCommentById(comment_id).then(res => 
           res.map((cmt, index) =>(
 
             <Card variant="outlined" sx={{ minWidth: 320 }} key={index}>
