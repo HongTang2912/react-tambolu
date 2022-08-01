@@ -5,13 +5,14 @@ import Card from '@mui/joy/Card';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Typography from '@mui/joy/Typography';
 import {getCommentById} from '/public/store/ProductState'
+import * as React from 'react'
 
 
 export default function CommentBlock({comment_id}) {
-    return (
-      {
-        getCommentById(comment_id ?? []).then(res => 
-          res.map((cmt, index) =>(
+  return (
+        {
+       
+          comment_id.map((cmt, index) =>(
 
             <Card variant="outlined" sx={{ minWidth: 320 }} key={index}>
               
@@ -42,10 +43,8 @@ export default function CommentBlock({comment_id}) {
                 </Typography>
               </CardOverflow>
             </Card>
-          ))
+          )
         )
       }
-      
-    )
-    
+  )
 }

@@ -305,7 +305,7 @@ export default function ProductDetail({product}) {
                 Send
             </Button>
             </Box>
-            <CommentBlock comment_id={product?.comment_id}/>
+            <CommentBlock comment_id={getCommentById(product?.comment_id).then(res => res)}/>
         </div>
     )
 }
