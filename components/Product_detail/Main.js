@@ -39,15 +39,11 @@ export default function ProductDetail({product}) {
        
     })
 
-    React.useEffect(() => {
-        getCommentById(product?.comment_id).then(res => {
-            console.log(res)
-        })
-    },[product])
     
     const RatioOfRatingPoint = (point) => {
-
+        if (point)
         return (point / product?.rating_point?.reduce((sum, i) => sum + i, 0) * 100)
+        else return 0;
     }
     const AvgRatingPoint = () => {
         return product?.rating_point?.reduce((sum, i, index) => {
@@ -309,7 +305,7 @@ export default function ProductDetail({product}) {
                 Send
             </Button>
             </Box>
-            <CommentBlock/>
+            <CommentBlock comment_id={product?.comment_id}/>
         </div>
     )
 }
