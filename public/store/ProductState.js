@@ -64,7 +64,7 @@ export const getCommentById = async (ids) => {
   const session = driver.session();
   try {
     let list = [];
-    for (var i = 0; i < ids.length; i++) {
+    for (var i = 0; i < ids?.length; i++) {
       const data = await session.run(
         `match (c: Comment) where ID(c) = $id return c.content`,
         {
