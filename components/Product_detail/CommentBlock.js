@@ -8,7 +8,7 @@ import {getCommentById} from '/public/store/ProductState'
 
 export default function CommentBlock({comment_id}) {
 
-  const block = getCommentById(comment_id).then(res => res.)
+  const block = getCommentById(comment_id).then(res => res)
 
   return (
     block.map((cmt, index) => (
