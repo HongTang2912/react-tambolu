@@ -31,6 +31,7 @@ export default function Home() {
         setProduct(res);
       })        
       getCommentById(product?.comment_id).then((data) => {
+        console.log(data)
         setCommentBlock(data)
       })
       
