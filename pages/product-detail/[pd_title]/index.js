@@ -35,7 +35,7 @@ export default function Home() {
         setCommentBlock(data)
       })
       
-    },[pd_title]);
+    },[pd_title, product?.comment]);
   
   return (
     
