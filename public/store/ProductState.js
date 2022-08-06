@@ -64,14 +64,16 @@ export const getCommentById = async (ids) => {
   const session = driver.session();
   try {
     let list = [];
-    for (var i = 0; i < ids?.length; i++) {
-      const data = await session.run(
-        `match (c: Comment) where ID(c) = $id return c.content`,
-        {
-          id: ids[i].low,
-        }
-      );
-      list.push(data?.records[0]?._fields[0]);
+    if (ids){
+      for (var i = 0; i < ids.length; i++) {
+        const data = await session.run(
+          `match (c: Comment) where ID(c) = $id return c.content`,
+          {
+            id: ids[i].low,
+          }
+        );
+        list.push(data?.records[0]?._fields[0]);
+      }
     }
     return list;
   } catch (err) {
