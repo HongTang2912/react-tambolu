@@ -101,7 +101,7 @@ function Product({product}) {
                 <Link href={`product-detail/${product.id}`}>
                     <a>
                         <div className={Styles.body}>
-                            <img lazy-load className={Styles.productImg} src={product.imgSrc}/>
+                            <img lazy-load="true" className={Styles.productImg} src={product.imgSrc}/>
                         </div>
                         <div className={`text-ellipsis h-12`}>
                             <p>{product.title}</p>

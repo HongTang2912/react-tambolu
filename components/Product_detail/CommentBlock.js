@@ -4,10 +4,10 @@ import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardOverflow from "@mui/joy/CardOverflow";
 import Typography from "@mui/joy/Typography";
-import { getCommentById } from "/public/store/ProductState";
+
 
 export default function CommentBlock({ comment_block }) {
-  return comment_block.map((comment, index) => (
+  return comment_block?.map((comment, index) => (
     <Card variant="outlined" sx={{ minWidth: 320 }} key={index}>
       <Typography level="h2" sx={{ fontSize: "md", mt: 2 }}>
         User
@@ -42,5 +42,5 @@ export default function CommentBlock({ comment_block }) {
         </Typography>
       </CardOverflow>
     </Card>
-  ));
+  ))
 }
