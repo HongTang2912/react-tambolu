@@ -6,8 +6,9 @@ import ProductDetail from '/components/Product_detail/Main'
 import Footer from '/components/Footer/IntroduceInfo.js'
 import {useRouter} from 'next/router'
 import config from '/public/config.json';
-import {getQueryByTitle} from '/public/store/ProductState'
+import {getQueryByTitle, getCommentById} from '/public/store/ProductState'
 import {useState, useEffect} from 'react'
+import CommentBlock from '/components/Product_detail/CommentBlock'
 
 const PATH     = config.NEO4J_DB_CONFIG.PATH;
 const USERNAME = config.NEO4J_DB_CONFIG.USERNAME;
@@ -23,9 +24,16 @@ export default function Home() {
         title: pd_title,
         imgSrc: "https://dominionmartialarts.com/wp-content/uploads/2017/04/default-image.jpg"
     });
+    const [commentBlock, setCommentBlock] = useState([])
 
     useEffect(() => {
-      getQueryByTitle(pd_title).then((res) => {setProduct(res)})         
+      getQueryByTitle(pd_title).then((res) => {
+        setProduct(res);
+      })        
+      getCommentById(product?.comment_id).then((data) => {
+        setCommentBlock(data)
+      })
+      
     },[pd_title]);
   
   return (
@@ -42,6 +50,7 @@ export default function Home() {
         <Layout/>
 
         <ProductDetail product={product}/>
+        <CommentBlock comment_block={commentBlock}/>
 
         <Footer/>
         

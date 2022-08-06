@@ -19,13 +19,11 @@ import {
 
 import { VisibilityOff, Visibility, SendIcon } from "@mui/icons-material";
 import { getCommentById } from "/public/store/ProductState";
-import CommentBlock from "./CommentBlock";
 
 export default function ProductDetail({ product }) {
   const [point, setPoint] = React.useState(5);
   const [comment, setComment] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const [commentBlock, setCommentBlock] = React.useState([]);
 
   const product_description = useSpring({
     height: open ? 220 : 0,
@@ -66,12 +64,6 @@ export default function ProductDetail({ product }) {
       comment: comment,
     });
   };
-
-  React.useEffect(() => {
-    getCommentById(product?.comment_id).then((res) => {
-      setCommentBlock(res);
-    });
-  },[]);
 
   return (
     <div className="products-container">
@@ -315,7 +307,6 @@ export default function ProductDetail({ product }) {
           Send
         </Button>
       </Box>
-      <CommentBlock comment_block={commentBlock} />
     </div>
   );
 }
