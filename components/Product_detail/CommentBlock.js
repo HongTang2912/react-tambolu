@@ -11,7 +11,7 @@ export default function CommentBlock({comment_block}) {
 
 
   return (
-    comment_block.forEach((comment) => (
+    comment_block.map((comment, index) => (
 
     <Card variant="outlined" sx={{ minWidth: 320 }} key={index}>
         {console.log(block)}
