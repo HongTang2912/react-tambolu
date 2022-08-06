@@ -4,7 +4,6 @@ import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Typography from '@mui/joy/Typography';
-import * as React from 'react'
 
 
 export default function CommentBlock({comment_id}) {

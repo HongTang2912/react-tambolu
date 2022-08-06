@@ -109,7 +109,7 @@ function Product({product}) {
                         <div className={Styles.info}>
                             
                            
-                            <span className={Styles.price}>{product.price}</span>
+                            <span className={`text-red-500 ${Styles.price}`}>{product.price}</span>
                             <span>
                                 {/* <Button className={Styles.button_wishList}>
                                     <FaHeart/>
