@@ -18,8 +18,6 @@ export default function Home() {
   const router = useRouter()
     const { pd_title } = router.query
     
-   
-
     const [product, setProduct] = useState({
         rating_point: [0],
         title: pd_title,

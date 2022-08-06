@@ -34,7 +34,7 @@ export default function ProductDetail({product}) {
     const [point, setPoint] = React.useState(5)
     const [comment, setComment] = React.useState("")
     const [open, setOpen] = React.useState(false);
-
+    const [commentBlock, setCommentBlock] = React.useState([])
 
     const product_description = useSpring({
        height: open ? 220 : 0,
@@ -78,7 +78,7 @@ export default function ProductDetail({product}) {
 
     React.useEffect(()=> {
         getCommentById(product?.comment_id).then(res =>{
-            console.log(res)
+            setCommentBlock(res)
         })
     })
 
@@ -313,7 +313,7 @@ export default function ProductDetail({product}) {
                 Send
             </Button>
             </Box>
-            <CommentBlock comment_id={product?.comment_id}/>
+            <CommentBlock comment_block={commentBlock}/>
         </div>
     )
 }
