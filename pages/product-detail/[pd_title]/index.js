@@ -30,12 +30,11 @@ export default function Home() {
       getQueryByTitle(pd_title).then((res) => {
         setProduct(res);
         getCommentById(res?.comment_id).then((data) => {
-          console.log(data)
           setCommentBlock(data)
         })
       })        
       
-    },[pd_title, product]);
+    },[pd_title]);
   
   return (
     

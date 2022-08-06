@@ -12,7 +12,9 @@ export async function readData(page) {
   const session = driver.session();
   let data = [];
   try {
-    const result = await session.run(`match (n:Product) WITH n LIMIT 100 return n`);
+    const result = await session.run(
+      `match (n:Product) WITH n LIMIT 100 return n`
+    );
     const records = result.records;
     records.forEach(async (rec) => {
       await data.push(rec.get(0).properties);
@@ -60,31 +62,28 @@ export const getQueryByTitle = async (pd_title) => {
 };
 
 export const getCommentById = async (ids) => {
-  if (ids){
+  if (ids) {
     const driver = neo4j.driver(PATH, neo4j.auth.basic(USERNAME, PASSWORD));
     const session = driver.session();
     try {
       let list = [];
-        for (var i = 0; i < ids.length; i++) {
-          const data = await session.run(
-            `match (c: Comment) where ID(c) = $id return c.content`,
-            {
-              id: ids[i].low,
-            }
-          );
-          list.push(data?.records[0]?._fields[0]);
-        }
-        return list;
-      } catch (err) {
+      for (var i = 0; i < ids.length; i++) {
+        const data = await session.run(
+          `match (n:Comment) <-[:COMMENT]- (u:User) WHERE ID(n) = $id RETURN {comment: n, user: u}`,
+          {
+            id: ids[i].low,
+          }
+        );
+        list.push(data?.records[0]?._fields[0]);
+      }
+      return list;
+    } catch (err) {
       await console.error(err);
     } finally {
       await session.close();
     }
     await driver.close();
-  } 
-  else {
-    return []
+  } else {
+    return [];
   }
 };
-
-

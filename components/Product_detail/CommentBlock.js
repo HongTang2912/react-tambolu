@@ -13,7 +13,7 @@ export default function CommentBlock({ comment_block }) {
         User
       </Typography>
       <Typography level="body2" sx={{ mt: 0.5, mb: 2 }}>
-        Comment content
+        {comment}
       </Typography>
       <CardOverflow
         variant="soft"
@@ -31,7 +31,7 @@ export default function CommentBlock({ comment_block }) {
           level="body3"
           sx={{ fontWeight: "md", color: "text.secondary" }}
         >
-          {comment}
+          Ratio
         </Typography>
         <Box sx={{ width: 2, bgcolor: "divider" }} />
         <Typography
