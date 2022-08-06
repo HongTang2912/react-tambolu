@@ -60,7 +60,7 @@ export const getQueryByTitle = async (pd_title) => {
 };
 
 export const getCommentById = async (ids) => {
-  if (ids.length != 0){
+  if (ids){
     const driver = neo4j.driver(PATH, neo4j.auth.basic(USERNAME, PASSWORD));
     const session = driver.session();
     try {
