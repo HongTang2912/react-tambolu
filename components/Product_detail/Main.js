@@ -18,9 +18,9 @@ import {
 } from "@mui/material";
 
 import { VisibilityOff, Visibility, SendIcon } from "@mui/icons-material";
-import { getCommentById } from "/public/store/ProductState";
+import { createComment } from "/public/store/ProductState";
 
-export default function ProductDetail({ product }) {
+export default function ProductDetail({ product, comment_block }) {
   const [point, setPoint] = React.useState(5);
   const [comment, setComment] = React.useState("");
   const [open, setOpen] = React.useState(false);
@@ -32,17 +32,26 @@ export default function ProductDetail({ product }) {
   const RatioOfRatingPoint = (point) => {
     if (point)
       return (
-        (point / product?.rating_point?.reduce((sum, i) => sum + i, 0)) * 100
+        (point / FilterRatingPoint()?.reduce((sum, i) => sum + i, 0)) * 100
       );
     else return 0;
   };
   const AvgRatingPoint = () => {
     return (
-      product?.rating_point?.reduce((sum, i, index) => {
-        return sum + i * (5 - index);
-      }, 0) / product?.rating_point?.reduce((sum, i) => sum + i, 0)
+      FilterRatingPoint()?.reduce((sum, i, index) => {
+        return sum + i * (index+1);
+      }, 0) / FilterRatingPoint()?.reduce((sum, i) => sum + i, 0)
     );
   };
+
+  const FilterRatingPoint = () => {
+    let rating = [0,0,0,0,0]
+    comment_block?.map((block, index) => {
+      rating[block.comment.properties.rating_point-1] += 1;
+    })
+    console.log(rating)
+    return rating
+  }
 
   const handleClick = () => {
     setOpen((prev) => !prev);
@@ -59,14 +68,17 @@ export default function ProductDetail({ product }) {
   };
 
   const handleClickSubmit = () => {
-    console.log({
-      point: point,
-      comment: comment,
-    });
+    createComment({
+      rating_point: point*1,
+      content: comment,
+      time: new Date()
+    }, product?.id);
   };
 
   return (
     <div className="products-container">
+
+      {FilterRatingPoint()}
       <div
         className={`flex flex-col bg-white container:flex-row items-center container:items-start ${Styles["product-detail"]}`}
       >
@@ -259,7 +271,7 @@ export default function ProductDetail({ product }) {
                 {AvgRatingPoint().toFixed(1)}
               </h1>
               <h1 className="text-center">
-                ({product?.rating_point?.reduce((sum, i) => sum + i)})
+                ({FilterRatingPoint()?.reduce((sum, i) => sum + i)})
               </h1>
             </div>
             <div className="w-64 py-3">
@@ -267,39 +279,39 @@ export default function ProductDetail({ product }) {
                 className="py-2 my-2"
                 variant="buffer"
                 valueBuffer={0}
-                value={RatioOfRatingPoint(product?.rating_point[0])}
+                value={RatioOfRatingPoint(FilterRatingPoint()[0])}
               />
               <LinearProgress
                 className="py-2 my-2"
                 variant="buffer"
                 valueBuffer={0}
-                value={RatioOfRatingPoint(product?.rating_point[1])}
+                value={RatioOfRatingPoint(FilterRatingPoint()[1])}
               />
               <LinearProgress
                 className="py-2 my-2"
                 variant="buffer"
                 valueBuffer={0}
-                value={RatioOfRatingPoint(product?.rating_point[2])}
+                value={RatioOfRatingPoint(FilterRatingPoint()[2])}
               />
               <LinearProgress
                 className="py-2 my-2"
                 variant="buffer"
                 valueBuffer={0}
-                value={RatioOfRatingPoint(product?.rating_point[3])}
+                value={RatioOfRatingPoint(FilterRatingPoint()[3])}
               />
               <LinearProgress
                 className="py-2 my-2"
                 variant="buffer"
                 valueBuffer={0}
-                value={RatioOfRatingPoint(product?.rating_point[4])}
+                value={RatioOfRatingPoint(FilterRatingPoint()[4])}
               />
             </div>
             <div className="leading-6 text-right px-2">
-              <p>{product?.rating_point[0]}</p>
-              <p>{product?.rating_point[1]}</p>
-              <p>{product?.rating_point[2]}</p>
-              <p>{product?.rating_point[3]}</p>
-              <p>{product?.rating_point[4]}</p>
+              <p>{FilterRatingPoint()[0]}</p>
+              <p>{FilterRatingPoint()[1]}</p>
+              <p>{FilterRatingPoint()[2]}</p>
+              <p>{FilterRatingPoint()[3]}</p>
+              <p>{FilterRatingPoint()[4]}</p>
             </div>
           </FormControl>
         </div>

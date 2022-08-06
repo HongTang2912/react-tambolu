@@ -7,13 +7,13 @@ import Typography from "@mui/joy/Typography";
 
 
 export default function CommentBlock({ comment_block }) {
-  return comment_block?.map((comment, index) => (
+  return comment_block?.map((props, index) => (
     <Card variant="outlined" sx={{ minWidth: 320 }} key={index}>
       <Typography level="h2" sx={{ fontSize: "md", mt: 2 }}>
-        User
+        {props.user.properties.username}
       </Typography>
       <Typography level="body2" sx={{ mt: 0.5, mb: 2 }}>
-        {comment}
+        {props.comment.properties.content}
       </Typography>
       <CardOverflow
         variant="soft"
@@ -31,14 +31,14 @@ export default function CommentBlock({ comment_block }) {
           level="body3"
           sx={{ fontWeight: "md", color: "text.secondary" }}
         >
-          Ratio
+          {props.comment.properties.rating_point}
         </Typography>
         <Box sx={{ width: 2, bgcolor: "divider" }} />
         <Typography
           level="body3"
           sx={{ fontWeight: "md", color: "text.secondary" }}
         >
-          Time
+          {`${props.comment.properties.time.day}-${props.comment.properties.time.month}-${props.comment.properties.time.year}`}
         </Typography>
       </CardOverflow>
     </Card>

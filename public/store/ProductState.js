@@ -69,9 +69,9 @@ export const getCommentById = async (ids) => {
       let list = [];
       for (var i = 0; i < ids.length; i++) {
         const data = await session.run(
-          `match (n:Comment) <-[:COMMENT]- (u:User) WHERE ID(n) = $id RETURN {comment: n, user: u}`,
+          `match (n:Comment) <-[:COMMENT]- (u:User) WHERE ID(n) = $id RETURN {user: u,comment: n}`,
           {
-            id: ids[i].low,
+            id: ids[i]*1,
           }
         );
         list.push(data?.records[0]?._fields[0]);
@@ -87,3 +87,50 @@ export const getCommentById = async (ids) => {
     return [];
   }
 };
+
+export const createComment = async(comment, pid) => {
+  
+  const driver = neo4j.driver(PATH, neo4j.auth.basic(USERNAME, PASSWORD));
+  const session = driver.session();
+  try {
+
+    const data = await session.run(
+      `create (n: Comment {rating_point: $rating_point, content: $content, time: $time}) return n`,
+      {
+        rating_point: comment.rating_point,
+        content: comment.content,
+        time: comment.time.toDateString(),
+      }
+    );
+    
+    const id = data?.records[0]?._fields[0]?.identity.low
+      
+    const data2 = await session.run(
+      `match (n: Comment) , 
+      (p: User {username: "Pinkguy"}) 
+      where ID(n) = $id
+      create (p) -[:COMMENT]-> (n) return n,p`,
+      {
+        id: id
+      }
+    );
+
+    const data3 = await session.run(
+      `match (n: ProductReview {id: $pid})
+      set n.comment_id = n.comment_id + $id
+      return n`,
+      {
+        pid: pid,
+        id: id.toString()
+      }
+    );
+    
+   
+  } catch (err) {
+    await console.error(err);
+  } finally {
+    await session.close();
+  }
+  await driver.close();
+  
+}

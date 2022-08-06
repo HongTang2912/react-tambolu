@@ -49,7 +49,7 @@ export default function Home() {
        
         <Layout/>
 
-        <ProductDetail product={product}/>
+        <ProductDetail product={product} comment_block={commentBlock}/>
         <CommentBlock comment_block={commentBlock}/>
 
         <Footer/>
