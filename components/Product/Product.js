@@ -46,11 +46,6 @@ export default function PaginatedItems({ itemsPerPage, products }) {
 
     const handlePageClick = (event) => {
         const newOffset = ((event.target.ariaLabel.replace("Go to page ", '')*1) * itemsPerPage) % products.length;
-
-        // console.log(
-        //     `User requested page number ${event.selected}, which is offset ${newOffset}`
-        // );
-        console.log()
         setItemOffset(newOffset);
 
     };

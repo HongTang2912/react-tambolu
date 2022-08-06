@@ -4,7 +4,6 @@ import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Typography from '@mui/joy/Typography';
-import {getCommentById} from '/public/store/ProductState'
 import * as React from 'react'
 
 

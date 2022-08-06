@@ -17,6 +17,8 @@ import {
     Box,
     LinearProgress
 } from "@mui/material"
+
+
 import {
     VisibilityOff,
     Visibility,
@@ -73,6 +75,12 @@ export default function ProductDetail({product}) {
             comment: comment
         })
     }
+
+    React.useEffect(()=> {
+        getCommentById(product?.comment_id).then(res =>{
+            console.log(res)
+        })
+    })
 
     return (    
         <div className="products-container">
@@ -305,7 +313,6 @@ export default function ProductDetail({product}) {
                 Send
             </Button>
             </Box>
-            <CommentBlock comment_id={getCommentById(product?.comment_id).then(res => res)}/>
         </div>
     )
 }

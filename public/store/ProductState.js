@@ -12,7 +12,7 @@ export async function readData(page) {
   const session = driver.session();
   let data = [];
   try {
-    const result = await session.run(`match (n:Product) return n`);
+    const result = await session.run(`match (n:Product) WITH n LIMIT 100 return n`);
     const records = result.records;
     records.forEach(async (rec) => {
       await data.push(rec.get(0).properties);
