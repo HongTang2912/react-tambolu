@@ -1,15 +1,12 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import axios from 'axios'
-import { useEffect, useState, useRef} from 'react'
-import Layout from '../components/Layout/Layout'
+import styles from '/styles/Home.module.css'
+import { useEffect, useState } from 'react'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import PaginatedItems from '../components/Product/Product';
-import Footer from '../components/Footer/IntroduceInfo.js'
-import config from '/public/config.json'
-import {readData} from '/public/store/ProductState'
+import { readData } from '/public/store/ProductState'
+import Login from '/components/Authentication/Login'
+import Layout from '/components/Layout/Layout'
 
 
 export default function Home() {
@@ -36,14 +33,8 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-       
         <Layout/>
-        <div className="products-container">
-         
-          <PaginatedItems itemsPerPage={20} products={products}/>
-          
-        </div>
-        <Footer/>
+        <Login/>
         
       </main>
 

@@ -134,3 +134,28 @@ export const createComment = async(comment, pid) => {
   await driver.close();
   
 }
+
+export const loginUser = async(username, password) => {
+  const driver = neo4j.driver(PATH, neo4j.auth.basic(USERNAME, PASSWORD));
+  const session = driver.session();
+  let data;
+  try {
+    const result = await session.run(
+      `match (n:User {username: $username}) return n.password`,
+      {
+        username: username
+      }
+    );
+    data = result?.records[0]?._fields[0]
+
+    // await console.log(data);
+  } catch (err) {
+    await console.error(err);
+  } finally {
+    await session.close();
+  }
+
+  // on application exit:
+  await driver.close();
+  if (data === password) return true; return false
+}

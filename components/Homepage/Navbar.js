@@ -1,13 +1,12 @@
 import React from 'react'
 import Styles from './Navbar.module.css'
-import Image from 'next/image'
-import Logo from '/public/images/React-icon.svg.png'
+import Link from 'next/link'
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import {FaCartArrowDown} from 'react-icons/fa';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-
+import Tambolu from '/components/Logo/Tambolu'
 
 const options = [
     { label: 'The Godfather', id: 1 },
@@ -18,13 +17,11 @@ export default function Navbar() {
     return (
         <div className={Styles.container}>
             <div className={`bg-white ${Styles.navbar}`}>
-                <div id="item-1" className="hidden container:block">
-                   
-                        <Image className={Styles.logo} width={150} height={150} src={Logo} alt=""/>
-        
-   
-    
-                </div>
+                <Link href="/">
+                    <div id="item-1" className="hidden container:block">
+                        <Tambolu/>
+                    </div>
+                </Link>
     
                 <div id="item-2">
                     <Stack direction="row" spacing={2}>

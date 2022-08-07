@@ -77,8 +77,6 @@ export default function ProductDetail({ product, comment_block }) {
 
   return (
     <div className="products-container">
-
-      {FilterRatingPoint()}
       <div
         className={`flex flex-col bg-white container:flex-row items-center container:items-start ${Styles["product-detail"]}`}
       >

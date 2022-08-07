@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Styles from './Intro.module.css'
 import styled from 'styled-components';
+import Link from 'next/link'
 
 
 export default function Intro() {
@@ -20,7 +21,7 @@ export default function Intro() {
                 <div id="item-3" className={Styles.authenticate_field}>
                     <Stack direction="row" spacing={2}>
                         <Button>
-                            Đăng nhập
+                            <Link href="/login">Đăng nhập</Link>
                         </Button>
                         <Button variant="contained" className={`text-black ${Styles.authenticate_button}`}>
                             Đăng ký
