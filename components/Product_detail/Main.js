@@ -41,15 +41,14 @@ export default function ProductDetail({ product, comment_block }) {
       FilterRatingPoint()?.reduce((sum, i, index) => {
         return sum + i * (index+1);
       }, 0) / FilterRatingPoint()?.reduce((sum, i) => sum + i, 0)
-    );
+    ) || 0;
   };
 
   const FilterRatingPoint = () => {
     let rating = [0,0,0,0,0]
-    comment_block?.map((block, index) => {
+    comment_block?.map((block) => {
       rating[block.comment.properties.rating_point-1] += 1;
     })
-    console.log(rating)
     return rating
   }
 
@@ -72,7 +71,7 @@ export default function ProductDetail({ product, comment_block }) {
       rating_point: point*1,
       content: comment,
       time: new Date()
-    }, product?.id);
+    }, product?.product_id);
   };
 
   return (
@@ -106,7 +105,7 @@ export default function ProductDetail({ product, comment_block }) {
             </strong>
           </div>
           <div className="prices">
-            <span className="price text-red-400 text-3xl">
+            <span className="price text-red-4pd_id00 text-3xl">
               {product?.price}
             </span>
             {open ? "" : <br />}
@@ -116,7 +115,7 @@ export default function ProductDetail({ product, comment_block }) {
           </div>
 
           <div>
-            <small>Mã sản phẩm: {product?.id}</small>
+            <small>Mã sản phẩm: {product?.product_id}</small>
           </div>
 
           <div className="group-button flex gap-x-4 font-bold">

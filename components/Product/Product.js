@@ -98,7 +98,7 @@ function Product({product}) {
                 } 
             </span>
             <div className={Styles.productInner}>
-                <Link href={`product-detail/${product.id}`}>
+                <Link href={`product-detail/${product.product_id}`}>
                     <a>
                         <div className={Styles.body}>
                             <img lazy-load="true" className={Styles.productImg} src={product.imgSrc}/>

@@ -17,7 +17,7 @@ export async function readData(page) {
     );
     const records = result.records;
     records.forEach(async (rec) => {
-      await data.push(rec.get(0).properties);
+      await data.push({...rec.get(0).properties, product_id: rec._fields[0]?.identity?.low});
     });
 
     // await console.log(data);
@@ -32,27 +32,25 @@ export async function readData(page) {
   return data;
 }
 
-export const getQueryByTitle = async (pd_title) => {
+export const getQueryById = async (pd_id) => {
   const driver = neo4j.driver(PATH, neo4j.auth.basic(USERNAME, PASSWORD));
   const session = driver.session();
   try {
-    const data = await session.run(`MATCH (n:Product {id: $id}) return n`, {
-      id: pd_title,
-    });
-    const data2 = await session.run(
-      `MATCH (n:ProductReview {id: $id}) return n`,
+    const data = await session.run(
+      `MATCH (n:Product) <-[r:REVIEW_OF]- (m:ProductReview) where ID(n) = $id return {product: n, review: m}`, 
       {
-        id: pd_title,
+        id: pd_id,
       }
     );
 
-    if (data?.records[0]?._fields[0]?.properties) {
+    if (data?.records[0]?._fields[0]) {
       let prod = {
-        ...data?.records[0]?._fields[0]?.properties,
-        ...data2?.records[0]?._fields[0]?.properties,
+        ...data?.records[0]?._fields[0]?.product?.properties,
+        ...data?.records[0]?._fields[0]?.review?.properties
       };
       return prod;
     }
+
   } catch (err) {
     await console.error(err);
   } finally {
@@ -71,7 +69,7 @@ export const getCommentById = async (ids) => {
         const data = await session.run(
           `match (n:Comment) <-[:COMMENT]- (u:User) WHERE ID(n) = $id RETURN {user: u,comment: n}`,
           {
-            id: ids[i]*1,
+            id: (ids[i]*1),
           }
         );
         list.push(data?.records[0]?._fields[0]);
@@ -116,7 +114,7 @@ export const createComment = async(comment, pid) => {
     );
 
     const data3 = await session.run(
-      `match (n: ProductReview {id: $pid})
+      `match (n: ProductReview {product_id: $pid})
       set n.comment_id = n.comment_id + $id
       return n`,
       {
