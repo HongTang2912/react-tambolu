@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { readData } from '/public/store/ProductState'
-import Login from '/components/Authentication/Login'
+import Register from '/components/Authentication/Register'
 import Layout from '/components/Layout/Layout'
 
 
@@ -34,7 +34,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <Layout/>
-        <Login/>
+        <Register/>
         
       </main>
 

@@ -1,6 +1,6 @@
 import React from 'react'
-import Intro from '../Introduction/Intro.js'
-import Category from '../Catgory/Categories.js';
+import Intro from '../Homepage/Intro.js'
+import Category from '../Homepage/Categories.js';
 import Navbar from '../Homepage/Navbar.js'
 
 
