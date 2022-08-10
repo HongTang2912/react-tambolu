@@ -8,38 +8,40 @@ import { CssVarsProvider } from "@mui/joy/styles";
 import Styles from "./Auth.module.css";
 import TamboluLogo from "/components/Logo/Tambolu";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { loginUser } from "../../public/store/ProductState";
 import MessageDialog from "../Dialog/MessageDialog";
 import Checkbox from "@mui/joy/Checkbox";
+import ErrorsList from './Errors'
+import {RegisterUser} from '/public/store/ProductState'
 
 export default function Register() {
   const [radius, setRadius] = React.useState(16);
   const [childHeight, setChildHeight] = React.useState(32);
+
   const [isVisible, setVisible] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
   const [isSaveAccount, setSaveAccount] = React.useState(false);
-  const [isLogin, setLoginState] = React.useState(null);
+  const [errorsList, setErrorsList] = React.useState([[],[],[],[],[],[]])
+  const [registerClicked, setRegisClicked] = React.useState(false)
+  const [logoSize, setLogoSize] = React.useState({
+    width: 400,
+    height: 400,
+  });
 
   const RegisterForm = React.useRef();
 
-  const [logoSize, setLogoSize] = React.useState({
-    width: 300,
-    height: 300,
-  });
 
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   React.useEffect(() => {
-    for(let i = 0; i < 5; i++) {
-      console.log(RegisterForm.current.childNodes[i].childNodes[1]?.querySelector('input').value);
-    }
-    
-    // console.log(); 
+    // for(let i = 0; i < 5; i++) {
+    //   console.log(RegisterForm.current.childNodes[i].childNodes[1]?.querySelector('input').value);
+    // }
+    setErrorsList(renderInput())
   }, []);
+  
+  const getValue = (i) => {
+    return RegisterForm.current.childNodes[i].childNodes[1]?.querySelector('input').value
+  }
 
-  const renderInput = () => {
+  const renderInput = (clicked) => {
     // for(let i = 0; i < 5; i++) {
     //   console.log(RegisterForm.current.childNodes[i].childNodes[1]?.querySelector('input').value);
     // }
@@ -59,9 +61,6 @@ export default function Register() {
 
     let errorsList = []
 
-    const getValue = (i) => {
-      return RegisterForm.current.childNodes[i].childNodes[1]?.querySelector('input').value
-    }
 
     const checkRegexErr = (index, range) => {
       if (!regexCheckList.username.test(getValue(index))) {
@@ -69,40 +68,50 @@ export default function Register() {
         if (!/[A-Z]/g.test(getValue(index))) {
           err.push("Có ít nhât 1 chữ cái viết hoa")
         }
-        if (!/[a-a]/g.test(getValue(index))) {
+        if (!/[a-z]/g.test(getValue(index))) {
           err.push("Có ít nhât 1 chữ cái viết thường")
         }
         if (!/[0-9]/g.test(getValue(index))) {
           err.push("Có ít nhât 1 chữ số")
         }
-        if (getValue(3).length < range) {
+        if (getValue(index).length < range) {
           err.push(`Có ít nhất ${range} ký tự`)
         }
         errorsList.push(err);
       }
+      else errorsList.push([])
     }
 
-    if (!regexCheckList.username.test(getValue(1))) {
-      
-      errorsList.push(["email không hợp lệ"]);
+    if (!regexCheckList.email.test(getValue(1))) {
+      clicked ? 
+      errorsList.push(["email không hợp lệ"])
+      : errorsList.push(["Hãy nhập email của bạn"])
     }
+    else errorsList.push([])
 
     checkRegexErr(2, 8);
-    checkRegexErr(3, 6);
-
-    if (!regexCheckList.username.test(getValue(4))) {
-      
-      errorsList.push(["Số điện thoại không đúng"]);
+    
+    if (!regexCheckList.tel.test(getValue(3))) {
+      clicked ? 
+      errorsList.push(["Số điện thoại không đúng"])
+      : errorsList.push(["Hãy nhập số điện thoại"])
     }
+    else errorsList.push([])
+    checkRegexErr(4, 6);
+    checkRegexErr(5, 6);
+    if (getValue(4) === getValue(5)) errorsList.push([]);
+    else errorsList.push(["Mật khẩu không khớp"]);
 
-    console.log(errorsList);
+    return errorsList;
+
+
   };
 
 
   return (
     <>
       <CssVarsProvider>
-        <div className="sm:h-screen sm:p-0 py-6 flex items-center">
+        <div className="py-6 flex items-center">
           <Box
             sx={{ display: "flex", flexDirection: "column", gap: 2 }}
             className="bg-blue-300 p-3 border border-blue-700 border-dashed border-4"
@@ -126,13 +135,14 @@ export default function Register() {
                 <Box
                   sx={{ display: "flex", flexDirection: "column", gap: 1 }}
                   className="bg-blue-300"
-                >
+                  >
                   <small
                     className={`username-label ${Styles["Montserrat-font"]}`}
                   >
                     Email
                   </small>
                   <Input
+                    error={errorsList[0].length != 0 && registerClicked}
                     size="md"
                     placeholder="example@gmail.com"
                     type="email"
@@ -141,6 +151,7 @@ export default function Register() {
                       "--Input-decorator-childHeight": `${childHeight}px`,
                     }}
                   />
+                  <ErrorsList clicked={registerClicked} error_list={errorsList[0]}/>
                 </Box>
 
                 {/* Username field */}
@@ -154,6 +165,7 @@ export default function Register() {
                     Tên đăng nhập
                   </small>
                   <Input
+                    error={errorsList[1].length != 0 && registerClicked}
                     size="md"
                     placeholder="Nguyenvana1998"
                     sx={{
@@ -161,6 +173,7 @@ export default function Register() {
                       "--Input-decorator-childHeight": `${childHeight}px`,
                     }}
                   />
+                  <ErrorsList clicked={registerClicked} error_list={errorsList[1]}/>
                 </Box>
 
                 {/* Phone number */}
@@ -174,6 +187,7 @@ export default function Register() {
                     Số điện thoại
                   </small>
                   <Input
+                    error={errorsList[2].length != 0 && registerClicked}
                     size="md"
                     type="tel"
                     placeholder="0123456789"
@@ -182,6 +196,7 @@ export default function Register() {
                       "--Input-decorator-childHeight": `${childHeight}px`,
                     }}
                   />
+                  <ErrorsList clicked={registerClicked} error_list={errorsList[2]}/>
                 </Box>
 
                 {/* Password and Confirm password */}
@@ -196,6 +211,7 @@ export default function Register() {
                   </small>
 
                   <Input
+                    error={errorsList[3].length != 0 && errorsList[4].length != 0 && registerClicked}
                     size="md"
                     placeholder=""
                     type={isVisible ? "text" : "password"}
@@ -214,6 +230,7 @@ export default function Register() {
                       "--Input-decorator-childHeight": `${childHeight}px`,
                     }}
                   />
+                  <ErrorsList clicked={registerClicked} error_list={errorsList[3]}/>
                 </Box>
 
                 <Box
@@ -227,6 +244,7 @@ export default function Register() {
                   </small>
 
                   <Input
+                    error={errorsList[3].length != 0 && errorsList[4].length != 0 && registerClicked}
                     size="md"
                     placeholder=""
                     type={isVisible ? "text" : "password"}
@@ -245,6 +263,8 @@ export default function Register() {
                       "--Input-decorator-childHeight": `${childHeight}px`,
                     }}
                   />
+                  <ErrorsList clicked={registerClicked} error_list={errorsList[4]}/>
+                  <ErrorsList clicked={registerClicked} error_list={errorsList[5]}/>
                 </Box>
 
                 {/* End */}
@@ -262,11 +282,31 @@ export default function Register() {
             <Button
               variant="outlined"
               onClick={() => {
-                renderInput();
+                setRegisClicked(true)
+                setErrorsList(renderInput(registerClicked));
+                if(
+                    renderInput(registerClicked)[0].length == 0,
+                    renderInput(registerClicked)[1].length == 0,
+                    renderInput(registerClicked)[2].length == 0,
+                    renderInput(registerClicked)[3].length == 0,
+                    renderInput(registerClicked)[4].length == 0,
+                    renderInput(registerClicked)[5].length == 0
+                  )
+                  RegisterUser({
+                    email: getValue(1),
+                    username: getValue(2),
+                    tel: getValue(3),
+                    password: getValue(4)
+                  }).then(res => {
+                    if(res.status == "success")
+                    location.replace("/")
+                  })
               }}
             >
+              
               Đăng Ký
             </Button>
+            
             <small
               className={`username-label text-right ${Styles["Montserrat-font"]}`}
             >
@@ -279,7 +319,6 @@ export default function Register() {
         </div>
       </CssVarsProvider>
 
-      <MessageDialog open={open} handleClose={handleClose} isLogin={isLogin} />
     </>
   );
 }

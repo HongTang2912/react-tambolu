@@ -17,6 +17,7 @@ import {
   LinearProgress,
 } from "@mui/material";
 
+import jwt_decode from "jwt-decode"
 import { VisibilityOff, Visibility, SendIcon } from "@mui/icons-material";
 import { createComment } from "/public/store/ProductState";
 
@@ -58,20 +59,22 @@ export default function ProductDetail({ product, comment_block }) {
 
   const handleSetRatingPoint = (ev) => {
     setPoint(ev.target.value);
-    console.log(ev.target.value);
   };
 
   const handlesetComment = (ev) => {
     setComment(ev.target.value);
-    console.log(ev.target.value);
   };
+
+  const getValue = () => {
+    return window.localStorage.getItem('login-user') == "" ? null : jwt_decode(window.localStorage.getItem('login-user'))
+}
 
   const handleClickSubmit = () => {
     createComment({
       rating_point: point*1,
       content: comment,
       time: new Date()
-    }, product?.product_id);
+    }, getValue().username, product?.product_id);
   };
 
   return (

@@ -86,7 +86,7 @@ export const getCommentById = async (ids) => {
   }
 };
 
-export const createComment = async(comment, pid) => {
+export const createComment = async(comment, username, pid) => {
   
   const driver = neo4j.driver(PATH, neo4j.auth.basic(USERNAME, PASSWORD));
   const session = driver.session();
@@ -105,11 +105,12 @@ export const createComment = async(comment, pid) => {
       
     const data2 = await session.run(
       `match (n: Comment) , 
-      (p: User {username: "Pinkguy"}) 
+      (p: User {username: $username}) 
       where ID(n) = $id
       create (p) -[:COMMENT]-> (n) return n,p`,
       {
-        id: id
+        id: id,
+        username: username
       }
     );
 
@@ -138,13 +139,75 @@ export const loginUser = async(username) => {
   const session = driver.session();
   let data;
   try {
-    const result = await session.run(
+    let result = await session.run(
       `match (n:User {username: $username}) return n`,
       {
         username: username
       }
     );
-    data = result?.records[0]?._fields[0].properties
+    
+    let result2 = await session.run(
+      `match (n:User {email: $email}) return n`,
+      {
+        email: username
+      }
+    );
+    
+    data = {...result?.records[0]?._fields[0].properties, ...result2?.records[0]?._fields[0].properties}
+    // await console.log(data);
+  } catch (err) {
+    await console.error(err);
+  } finally {
+    await session.close();
+  }
+
+  // on application exit:
+  await driver.close();
+  return data
+}
+
+
+export const RegisterUser = async(user) => {
+  const driver = neo4j.driver(PATH, neo4j.auth.basic(USERNAME, PASSWORD));
+  const session = driver.session();
+  let data;
+  try {
+
+    const User = await session.run(
+      `match (n:User) 
+      Where n.username = $username OR n.email = $email
+      return count(n)`,
+      {
+        username: user.username,
+        email: user.email,
+      }
+    );
+    if (User?.records[0]?._fields[0].low == 0){
+      const result = await session.run(
+        `merge (n:User {
+          username: $username,
+          email: $email,
+          password: $password,
+          phone_number: $tel
+        }) return n`,
+        {
+          username: user.username,
+          email: user.email,
+          password: user.password,
+          tel: user.tel
+        }
+      );
+      data = {
+        status: "success",
+        ...result?.records[0]?._fields[0].properties
+      }
+    }
+    else {
+      data = {
+        status: "failed",
+        message: ["Tài khoản đã tồn tại"]
+      }
+    }
 
     // await console.log(data);
   } catch (err) {
@@ -157,3 +220,4 @@ export const loginUser = async(username) => {
   await driver.close();
   return data
 }
+

@@ -20,7 +20,7 @@ export default function Navbar() {
   });
   return (
     <div className={Styles.container}>
-      <div className={`bg-white ${Styles.navbar}`}>
+      <div className={`bg-white ${Styles.navbar} flex flex-col`}>
         <Link href="/">
           <div id="item-1" className="hidden container:block">
             <TamboluLogo width={logoSize.width} height={logoSize.height}/>

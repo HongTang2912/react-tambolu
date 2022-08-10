@@ -4,9 +4,24 @@ import Stack from '@mui/material/Stack';
 import Styles from './Intro.module.css'
 import styled from 'styled-components';
 import Link from 'next/link'
-
+import jwt_decode from "jwt-decode"
 
 export default function Intro() {
+
+    const [user, setUser] = React.useState(null)
+
+    const getValue = () => {
+        return window.localStorage.getItem('login-user') == "" ? null : jwt_decode(window.localStorage.getItem('login-user'))
+    }
+
+    const removeUser = () => {
+        window.localStorage.setItem('login-user' ,"")
+    }
+
+    React.useEffect(() => {
+        console.log(getValue())
+        setUser(getValue())
+    },[])
     return (
         <div className={Styles.container}>
             <div className={Styles.intro}>
@@ -20,11 +35,25 @@ export default function Intro() {
     
                 <div id="item-3" className={Styles.authenticate_field}>
                     <Stack direction="row" spacing={2}>
-                        <Button>
-                            <Link href="/login">Đăng nhập</Link>
-                        </Button>
+                        {
+                            user == null ?
+                            <Button>
+                                <Link href="/login">Đăng nhập</Link>
+                            </Button>
+                            :
+                            <>
+
+                                <Button className={`text-black`}>
+                                    Hello {user.username}
+                                </Button>
+                                <Button onClick={() => {removeUser()}}>
+                                    <Link href="/login">Đăng xuất</Link>
+                                </Button>
+                            </>
+                        }
+
                         <Button variant="contained" className={`text-black ${Styles.authenticate_button}`}>
-                            Đăng ký
+                            <Link href="/register">Đăng ký</Link> 
                         </Button>
                        
                     </Stack>

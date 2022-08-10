@@ -11,12 +11,15 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { loginUser } from "../../public/store/ProductState";
 import MessageDialog from "../Dialog/MessageDialog";
 import Checkbox from "@mui/joy/Checkbox";
+import jwt_decode from "jwt-decode";
+import jwt_encode from "jwt-encode";
 
 export default function Login() {
+  
+
   const [radius, setRadius] = React.useState(16);
   const [childHeight, setChildHeight] = React.useState(32);
   const [isVisible, setVisible] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
   const [isSaveAccount, setSaveAccount] = React.useState(false);
   const [isLogin, setLoginState] = React.useState(null);
 
@@ -28,17 +31,13 @@ export default function Login() {
     height: 200,
   });
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   React.useEffect(() => {
     renderInput();
   }, []);
 
   const renderInput = () => {
-    const username = window.localStorage.getItem("saved-account");
-    usernameField.current.childNodes[0].value = username;
+    const username = window.localStorage.getItem("saved-account") ?? "";
+    usernameField.current.childNodes[0].value = username == "" ? "" : jwt_decode(username).username;
   };
 
   const getValues = () => {
@@ -47,17 +46,34 @@ export default function Login() {
         setLoginState(
           res.password === passwordField.current.childNodes[0].value
         );
+
+        window.localStorage.setItem(
+          "login-user",
+          jwt_encode({
+            username: res?.username,
+            email: res?.email,
+            phone_number: res?.phone_number
+
+          }, 'tambolu')
+        );
+
         if (isSaveAccount)
           window.localStorage.setItem(
             "saved-account",
-            usernameField.current.childNodes[0].value
+            jwt_encode({
+              username: res?.username,
+              email: res?.email,
+              phone_number: res?.phone_number
+
+            }, 'tambolu')
           );
+
         else window.localStorage.setItem("saved-account", "");
+        location.replace('/')
       })
       .catch((err) => {
         console.log(err);
       });
-    setOpen(true);
   };
 
   return (
@@ -149,7 +165,6 @@ export default function Login() {
         </div>
       </CssVarsProvider>
 
-      <MessageDialog open={open} handleClose={handleClose} isLogin={isLogin} />
     </>
   );
 }
