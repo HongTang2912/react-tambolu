@@ -11,7 +11,8 @@ export default function Intro() {
     const [user, setUser] = React.useState(null)
 
     const getValue = () => {
-        return window.localStorage.getItem('login-user') == "" ? null : jwt_decode(window.localStorage.getItem('login-user'))
+        return window.localStorage.getItem('login-user') == undefined || window.localStorage.getItem('login-user')  == ""
+        ? null : jwt_decode(window.localStorage.getItem('login-user'))
     }
 
     const removeUser = () => {

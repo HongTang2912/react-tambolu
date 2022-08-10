@@ -37,7 +37,9 @@ export default function Login() {
 
   const renderInput = () => {
     const username = window.localStorage.getItem("saved-account") ?? "";
-    usernameField.current.childNodes[0].value = username == "" ? "" : jwt_decode(username).username;
+    usernameField.current.childNodes[0].value = (
+      username == undefined || username == ""
+      ? "" : jwt_decode(username).username);
   };
 
   const getValues = () => {
