@@ -40,29 +40,64 @@ export default function Register() {
   }, []);
 
   const renderInput = () => {
-    for(let i = 0; i < 5; i++) {
-      console.log(RegisterForm.current.childNodes[i].childNodes[1]?.querySelector('input').value);
+    // for(let i = 0; i < 5; i++) {
+    //   console.log(RegisterForm.current.childNodes[i].childNodes[1]?.querySelector('input').value);
+    // }
+
+    const regexCheckList = {
+      //Minimum eight characters, at least one uppercase letter, one lowercase letter and one number:
+      username: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/g,
+
+      email: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+
+      //Minimum six characters, at least one uppercase letter, one lowercase letter and one number:
+      password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/g,
+
+      tel: /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/
+
     }
+
+    let errorsList = []
+
+    const getValue = (i) => {
+      return RegisterForm.current.childNodes[i].childNodes[1]?.querySelector('input').value
+    }
+
+    const checkRegexErr = (index, range) => {
+      if (!regexCheckList.username.test(getValue(index))) {
+        let err = [];
+        if (!/[A-Z]/g.test(getValue(index))) {
+          err.push("Có ít nhât 1 chữ cái viết hoa")
+        }
+        if (!/[a-a]/g.test(getValue(index))) {
+          err.push("Có ít nhât 1 chữ cái viết thường")
+        }
+        if (!/[0-9]/g.test(getValue(index))) {
+          err.push("Có ít nhât 1 chữ số")
+        }
+        if (getValue(3).length < range) {
+          err.push(`Có ít nhất ${range} ký tự`)
+        }
+        errorsList.push(err);
+      }
+    }
+
+    if (!regexCheckList.username.test(getValue(1))) {
+      
+      errorsList.push(["email không hợp lệ"]);
+    }
+
+    checkRegexErr(2, 8);
+    checkRegexErr(3, 6);
+
+    if (!regexCheckList.username.test(getValue(4))) {
+      
+      errorsList.push(["Số điện thoại không đúng"]);
+    }
+
+    console.log(errorsList);
   };
 
-  // const getValues = () => {
-  //   loginUser(usernameField.current.childNodes[0].value)
-  //     .then((res) => {
-  //       setLoginState(
-  //         res.password === passwordField.current.childNodes[0].value
-  //       );
-  //       if (isSaveAccount)
-  //         window.localStorage.setItem(
-  //           "saved-account",
-  //           usernameField.current.childNodes[0].value
-  //         );
-  //       else window.localStorage.setItem("saved-account", "");
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  //   setOpen(true);
-  // };
 
   return (
     <>
