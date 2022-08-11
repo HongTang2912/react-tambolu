@@ -153,7 +153,10 @@ export const loginUser = async(username) => {
       }
     );
     
-    data = {...result?.records[0]?._fields[0].properties, ...result2?.records[0]?._fields[0].properties}
+    data = {
+      ...result?.records[0]?._fields[0].properties, 
+      ...result2?.records[0]?._fields[0].properties
+    }
     // await console.log(data);
   } catch (err) {
     await console.error(err);
@@ -219,5 +222,75 @@ export const RegisterUser = async(user) => {
   // on application exit:
   await driver.close();
   return data
+}
+
+
+export const AddProductToCart = async(prod_id, username) => {
+  const driver = neo4j.driver(PATH, neo4j.auth.basic(USERNAME, PASSWORD));
+  const session = driver.session();
+  try {
+
+    const query = await session.run (
+      `MATCH (n:User {username: $username}), (m:Product) 
+      where ID(m) = $prod_id
+      merge (n) -[r:ADD_TO_CART]-> (m)
+      set r.quantity = 1
+      RETURN r`,
+      {
+        prod_id: prod_id,
+        username: username
+      }
+    )
+   
+
+    if (query?.records[0]?._fields[0].properties)
+      return query?.records[0]?._fields[0].properties
+    return;
+    // await console.log(data);
+  } catch (err) {
+    await console.error(err);
+  } finally {
+    await session.close();
+  }
+
+  // on application exit:
+  await driver.close();
+}
+
+
+export const ViewProductsInCart = async(username) => {
+  const driver = neo4j.driver(PATH, neo4j.auth.basic(USERNAME, PASSWORD));
+  const session = driver.session();
+  try {
+
+    const query = await session.run (
+      `MATCH (p:User)-[r:ADD_TO_CART]->(m:Product) 
+      where p.username = $username 
+      RETURN {user: p, products: m}`,
+      {
+        username: username
+      }
+    )
+   
+
+    if (query) {
+      let data = [];
+      query?.records?.forEach(node => {
+        data.push(node.map((item) => 
+          item.products.properties
+        ))
+      })
+      return data;
+    }
+    return;
+    // await console.log(data);
+  } catch (err) {
+    await console.error(err);
+  } finally {
+    await session.close();
+  }
+
+  // on application exit:
+  await driver.close();
 }
 

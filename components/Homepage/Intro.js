@@ -20,9 +20,9 @@ export default function Intro() {
     }
 
     React.useEffect(() => {
-        console.log(getValue())
         setUser(getValue())
     },[])
+    
     return (
         <div className={Styles.container}>
             <div className={Styles.intro}>
