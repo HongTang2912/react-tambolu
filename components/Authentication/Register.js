@@ -8,10 +8,11 @@ import { CssVarsProvider } from "@mui/joy/styles";
 import Styles from "./Auth.module.css";
 import TamboluLogo from "/components/Logo/Tambolu";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import MessageDialog from "../Dialog/MessageDialog";
+import jwt_decode from "jwt-decode";
+import jwt_encode from "jwt-encode";
 import Checkbox from "@mui/joy/Checkbox";
 import ErrorsList from './Errors'
-import {RegisterUser} from '/public/store/ProductState'
+import {RegisterUser, loginUser} from '/public/store/ProductState'
 
 export default function Register() {
   const [radius, setRadius] = React.useState(16);
@@ -106,6 +107,48 @@ export default function Register() {
 
 
   };
+
+  const saveToLocalStorage = (user, key) => {
+    window.localStorage.setItem(
+      key,
+      jwt_encode(
+        {
+          username: user?.username,
+          email: user?.email,
+          phone_number: user?.phone_number
+        },
+        "tambolu"
+      )
+    )
+  }
+
+  const RegisterNewUser = () => {
+    RegisterUser({
+      email: getValue(1),
+      username: getValue(2),
+      tel: getValue(3),
+      password: getValue(4)
+    }).then(res => {
+      if(res.status == "success") {
+
+       
+  
+        saveToLocalStorage(res, 'login-user')
+  
+        if (isSaveAccount) {
+          saveToLocalStorage(res, 'save-account')
+        }
+  
+        else
+          window.localStorage.removeItem("save-account");
+  
+          
+        
+        console.log(res)
+        location.replace("/")
+      }
+    })
+  }
 
 
   return (
@@ -285,22 +328,16 @@ export default function Register() {
                 setRegisClicked(true)
                 setErrorsList(renderInput(registerClicked));
                 if(
-                    renderInput(registerClicked)[0].length == 0,
-                    renderInput(registerClicked)[1].length == 0,
-                    renderInput(registerClicked)[2].length == 0,
-                    renderInput(registerClicked)[3].length == 0,
-                    renderInput(registerClicked)[4].length == 0,
+                    renderInput(registerClicked)[0].length == 0 &&
+                    renderInput(registerClicked)[1].length == 0 &&
+                    renderInput(registerClicked)[2].length == 0 &&
+                    renderInput(registerClicked)[3].length == 0 &&
+                    renderInput(registerClicked)[4].length == 0 &&
                     renderInput(registerClicked)[5].length == 0
-                  )
-                  RegisterUser({
-                    email: getValue(1),
-                    username: getValue(2),
-                    tel: getValue(3),
-                    password: getValue(4)
-                  }).then(res => {
-                    if(res.status == "success")
-                    location.replace("/")
-                  })
+                  ) {
+                    RegisterNewUser()
+                  }
+                 
               }}
             >
               

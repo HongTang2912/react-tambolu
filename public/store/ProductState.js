@@ -152,8 +152,11 @@ export const loginUser = async(username) => {
         email: username
       }
     );
+
+  
     
-    data = {
+    return {
+      status: "success",
       ...result?.records[0]?._fields[0].properties, 
       ...result2?.records[0]?._fields[0].properties
     }
@@ -166,7 +169,7 @@ export const loginUser = async(username) => {
 
   // on application exit:
   await driver.close();
-  return data
+ 
 }
 
 

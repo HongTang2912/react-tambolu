@@ -11,14 +11,6 @@ import Layout from '/components/Layout/Layout'
 
 export default function Home() {
 
-
-  const [products, setProducts] = useState([]);
-  useEffect(() => {
-
-      readData().then(res => {setProducts(res)}) 
-  }, [])
-
-
   
   return (
     <div className={styles.container}>

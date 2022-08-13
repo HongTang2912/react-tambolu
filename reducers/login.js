@@ -1,17 +1,21 @@
 
 
 const initialState = {
-    token: null,
+    user: null,
 
 }
 
 const loginReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'user/login': {
-            return action.payload
+            return {
+                user: action.payload
+            }
         }
         case 'user/logout': {
-            return null
+            return {
+                user: null
+            }
         }
         default: return state;
     }

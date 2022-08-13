@@ -13,15 +13,17 @@ import MessageDialog from "../Dialog/MessageDialog";
 import Checkbox from "@mui/joy/Checkbox";
 import jwt_decode from "jwt-decode";
 import jwt_encode from "jwt-encode";
+import { useSelector, useDispatch } from 'react-redux';
+import ErrorsList from './Errors'
 
 export default function Login() {
-  
+  const dispatch = useDispatch()
 
   const [radius, setRadius] = React.useState(16);
   const [childHeight, setChildHeight] = React.useState(32);
   const [isVisible, setVisible] = React.useState(false);
   const [isSaveAccount, setSaveAccount] = React.useState(false);
-  const [isLogin, setLoginState] = React.useState(null);
+  const [isValidated, setValidate] = React.useState(true)
 
   const usernameField = React.useRef();
   const passwordField = React.useRef();
@@ -33,45 +35,46 @@ export default function Login() {
 
   React.useEffect(() => {
     renderInput();
+
   }, []);
 
   const renderInput = () => {
-    const username = window.localStorage.getItem("saved-account") ?? "";
-    usernameField.current.childNodes[0].value = (
-      username == undefined || username == ""
-      ? "" : jwt_decode(username).username);
+    const username = window.localStorage.getItem("save-account") ?? "";
+    usernameField.current.childNodes[0].value = username != "" ? jwt_decode(username)?.username : null;
   };
+
+  const saveToLocalStorage = (user, key) => {
+    window.localStorage.setItem(
+      key,
+      jwt_encode(
+        {
+          username: user?.username,
+          email: user?.email,
+          phone_number: user?.phone_number
+        },
+        "tambolu"
+      )
+    )
+  }
 
   const getValues = () => {
     loginUser(usernameField.current.childNodes[0].value)
       .then((res) => {
-        setLoginState(
-          res.password === passwordField.current.childNodes[0].value
-        );
 
-        window.localStorage.setItem(
-          "login-user",
-          jwt_encode({
-            username: res?.username,
-            email: res?.email,
-            phone_number: res?.phone_number
+        saveToLocalStorage(res, 'login-user')
 
-          }, 'tambolu')
-        );
+        if (isSaveAccount) {
+          saveToLocalStorage(res, 'save-account')
+        }
 
-        if (isSaveAccount)
-          window.localStorage.setItem(
-            "saved-account",
-            jwt_encode({
-              username: res?.username,
-              email: res?.email,
-              phone_number: res?.phone_number
+        else
+          window.localStorage.removeItem("save-account");
 
-            }, 'tambolu')
-          );
-
-        else window.localStorage.setItem("saved-account", "");
-        location.replace('/')
+        setValidate(res.password == passwordField.current.childNodes[0]?.value);
+        if (res.password == passwordField.current.childNodes[0]?.value) {
+          
+          location.replace('/')
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -81,6 +84,7 @@ export default function Login() {
   return (
     <>
       <CssVarsProvider>
+        {console.log(isValidated)}
         <div className="h-screen flex items-center">
           <Box
             sx={{ display: "flex", flexDirection: "column", gap: 2 }}
@@ -154,7 +158,12 @@ export default function Login() {
               }}
             >
               Đăng nhập
+
             </Button>
+            <ErrorsList 
+              clicked={true} 
+              error_list={isValidated ? [] : ["Sai tên đăng nhập hoặc mật khẩu"]}
+            />
             <small
               className={`username-label text-right ${Styles["Montserrat-font"]}`}
             >
