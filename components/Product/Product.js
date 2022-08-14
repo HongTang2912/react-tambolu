@@ -9,6 +9,7 @@ import ReactPaginate from 'react-paginate';
 import {AddProductToCart} from '/public/store/ProductState'
 import MessageDialog from '../Dialog/MessageDialog'
 import jwt_decode from 'jwt-decode'
+import {useDispatch} from 'react-redux'
 
 function Items({ currentItems }) {
 
@@ -88,6 +89,25 @@ export default function PaginatedItems({ itemsPerPage, products }) {
 
 
 function Product({ product }) {
+
+    const dispatch = useDispatch()
+
+
+    const addCartProduct = async (id) => {
+        const user = window.localStorage.getItem('login-user') == undefined ||
+            window.localStorage.getItem('login-user') == ""
+            ? null : jwt_decode(window.localStorage.getItem('login-user'))
+
+        const prod = await AddProductToCart(id, user?.username).then(res =>
+            res 
+        )
+        dispatch({
+            type: 'cart/add-product',
+            payload: prod
+        })
+
+    }
+
     const styles = useSpring({
         
         to: [
@@ -97,14 +117,7 @@ function Product({ product }) {
         from: { opacity: 0 },
     })
     
-    const addToCart = (id) => {
-        const user = window.localStorage.getItem('login-user') == undefined || window.localStorage.getItem('login-user')  == ""
-        ? null : jwt_decode(window.localStorage.getItem('login-user'))
 
-        AddProductToCart(id, user.username).then(res => {
-            console.log(res)
-        }); 
-    }
 
     return (
         <animated.div style={styles} className={Styles.post}>
@@ -142,7 +155,7 @@ function Product({ product }) {
                 <Button 
                     variant={product.state == "out-of-stock" ? "disabled" : "outlined"} 
                     className={Styles.button_addCart}
-                    onClick={() => addToCart(product.product_id)}
+                    onClick={() => addCartProduct(product.product_id)}
                 >
                     Thêm vào giỏ hàng
                 </Button>

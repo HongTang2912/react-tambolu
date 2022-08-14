@@ -10,7 +10,7 @@ export default function Intro() {
     
     return (
         <div className={Styles.container}>
-            <div className={Styles.intro}>
+            <div className={`flex container:flex-row flex-col ${Styles.intro} justify-between`}>
                 <div id="item-1" className={Styles.info}>
                     <p>Thông tin liên hệ: </p>
                     <br/>

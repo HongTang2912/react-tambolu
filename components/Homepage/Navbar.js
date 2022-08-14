@@ -9,6 +9,7 @@ import Stack from "@mui/material/Stack";
 import TamboluLogo from "../Logo/Tambolu";
 import jwt_decode from 'jwt-decode'
 import { ViewProductsInCart } from '/public/store/ProductState'
+import { useDispatch, useSelector } from 'react-redux';
 
 const options = [
   { label: "The Godfather", id: 1 },
@@ -16,6 +17,7 @@ const options = [
 ];
 
 export default function Navbar() {
+  const dispatch = useDispatch()
   const [username, setUsername] = React.useState(null)
   const [cartProducts, setCartProducts] = React.useState([])
   const [logoSize, setLogoSize] = React.useState({
@@ -28,14 +30,25 @@ export default function Navbar() {
       ? null : jwt_decode(window.localStorage.getItem('login-user'))
   }
 
+   const getCartProduct = async() => {
+        const user = window.localStorage.getItem('login-user') == undefined ||
+            window.localStorage.getItem('login-user') == ""
+            ? null : jwt_decode(window.localStorage.getItem('login-user'))
+
+        const prod = await ViewProductsInCart(user?.username).then(res => 
+            res ? res?.map(r => r[0]) : []
+        )
+        dispatch({
+            type: 'cart/get-products',
+            payload: prod
+        })
+        
+    }
 
   React.useLayoutEffect(() => {
-
-    ViewProductsInCart(getUsername()?.username).then((res) => {
-        if (res) setCartProducts([...res?.map(r => r[0])])
-    })
+    getCartProduct()
     setUsername(getUsername()?.username)
-  },[])
+  }, [])
 
   
   return (
@@ -67,7 +80,7 @@ export default function Navbar() {
         <div className={Styles.item_3} id="item-3">
           <a href={`/cart/${username ? username : ''}`}>
             <FaCartArrowDown className={`${Styles.icon} ${Styles.cart_icon}`} />
-            <span className={Styles.badge}>{cartProducts.length}</span>
+            <span className={Styles.badge}>{useSelector(state => state.cart.product.length)}</span>
           </a>
         </div>
       </div>

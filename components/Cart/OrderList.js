@@ -17,13 +17,12 @@ function Quantity({ value, setValue, increment, decrement }) {
     return (
         <>
             <Box sx={{ 
-                mx: 'auto', 
                 display: 'flex', 
                 gap: 1, 
-                alignItems: 'center',
                 border: '1px solid #bae1ff',
                 padding: 1,
-                borderRadius: 16
+                borderRadius: 16,
+                width: 'min-content'
             }}>
                 <IconButton
                     variant="solid"
@@ -72,6 +71,7 @@ export default function OrderList({cart_product}) {
                     minWidth: '320px',
                     gap: 2,
                     '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' },
+                    border: 'none'
                 }}
             >
                 <AspectRatio ratio="1" sx={{ width: 90 }}>
@@ -80,36 +80,40 @@ export default function OrderList({cart_product}) {
                         alt=""
                     />
                 </AspectRatio>
-                <Box>
-                    <Box sx={{ ml: 0.5 }}>
-                        <Typography level="h2" fontSize="lg" id="card-description" mb={0.5}>
-                            {cart_product.title}
-                        </Typography>
+                
+                <Box sx={{ ml: 0.5 }}>
+                    <Typography level="h2" fontSize="lg" id="card-description" mb={0.5}>
+                        {cart_product.title}
+                    </Typography>
 
-                        {/* <Link
-                    overlay
-                    underline="none"
-                    href="#interactive-card"
-                    sx={{ color: 'text.tertiary' }}
-                    >
+                    {/* <Link
+                overlay
+                underline="none"
+                href="#interactive-card"
+                sx={{ color: 'text.tertiary' }}
+                >
+                
+                </Link> */}
                     
-                    </Link> */}
-                        <Quantity
-                            value={value}
-                            setValue={setValue}
-                            increment={increment}
-                            decrement={decrement}
-                        />
-                        <Chip
-                            variant="outlined"
-                            color="primary"
-                            size="sm"
-                            sx={{ pointerEvents: 'none' }}
-                        >
-                            {cart_product.price}
-                        </Chip>
-                    </Box>
+                        
+                    <Quantity
+                    
+                        value={value}
+                        setValue={setValue}
+                        increment={increment}
+                        decrement={decrement}
+                    />
+                    
+                    <Chip
+                        variant="outlined"
+                        color="primary"
+                        size="sm"
+                        sx={{ pointerEvents: 'none' }}
+                    >
+                        {cart_product.price}
+                    </Chip>
                 </Box>
+               
             </Card>
         </>
     )
