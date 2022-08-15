@@ -54,7 +54,7 @@ function Quantity({ value, setValue, increment, decrement }) {
 }
 
 export default function OrderList({cart_product}) {
-    const [value, setValue] = React.useState(1);
+    const [value, setValue] = React.useState(cart_product.quantity.quantity.low * 1);
     function increment() {
         setValue(value + 1);
     }
@@ -76,14 +76,14 @@ export default function OrderList({cart_product}) {
             >
                 <AspectRatio ratio="1" sx={{ width: 90 }}>
                     <img
-                        src={cart_product.imgSrc}
+                        src={cart_product.products.imgSrc}
                         alt=""
                     />
                 </AspectRatio>
                 
                 <Box sx={{ ml: 0.5 }}>
                     <Typography level="h2" fontSize="lg" id="card-description" mb={0.5}>
-                        {cart_product.title}
+                        {cart_product.products.title}
                     </Typography>
 
                     {/* <Link
@@ -110,7 +110,7 @@ export default function OrderList({cart_product}) {
                         size="sm"
                         sx={{ pointerEvents: 'none' }}
                     >
-                        {cart_product.price}
+                        {cart_product.products.price}
                     </Chip>
                 </Box>
                

@@ -269,7 +269,7 @@ export const ViewProductsInCart = async(username) => {
     const query = await session.run (
       `MATCH (p:User)-[r:ADD_TO_CART]->(m:Product) 
       where p.username = $username 
-      RETURN {user: p, products: m}`,
+      RETURN {user: p, products: m, quantity: r}`,
       {
         username: username
       }
@@ -279,8 +279,14 @@ export const ViewProductsInCart = async(username) => {
     if (query) {
       let data = [];
       query?.records?.forEach(node => {
-        data.push(node.map((item) => 
-          item.products.properties
+        data.push(node.map((item) => {
+            return {
+
+              products: item.products.properties,
+              user: item.user.properties,
+              quantity: item.quantity.properties
+            }
+          }
         ))
       })
       return data;
