@@ -12,11 +12,15 @@ import config from '/public/config.json'
 import {readData} from '/public/store/ProductState'
 import {useSelector, useDispatch} from 'react-redux';
 
+
 export default function Home() {
+
+  
 
   const [products, setProducts] = useState([]);
   useEffect(() => {
       readData().then(res => {setProducts(res)}) 
+      
   }, [])
 
 

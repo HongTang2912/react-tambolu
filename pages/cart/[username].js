@@ -26,7 +26,7 @@ export default function Home() {
 
             <main className={styles.main}>
 
-                <Layout />
+                <Layout/>
 
                 <Cart/>
 

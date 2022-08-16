@@ -4,19 +4,18 @@ import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
 import Chip from '@mui/joy/Chip';
 import Typography from '@mui/joy/Typography';
-import Button from '@mui/joy/Button';
-import Input from '@mui/joy/Input';
-import TextField from '@mui/joy/TextField';
 import IconButton from '@mui/joy/IconButton';
 import { FaPlus, FaMinus } from 'react-icons/fa'
+import { CssVarsProvider } from '@mui/joy/styles';
 
 function Quantity({ value, setValue, increment, decrement }) {
 
     const buttonStyle = `border bg-blue-500 hover:bg-blue-600 text-white text-2xl font-bold`;
 
     return (
-        <>
-            <Box sx={{ 
+        < CssVarsProvider>
+            <Box 
+                sx={{ 
                 display: 'flex', 
                 gap: 1, 
                 border: '1px solid #bae1ff',
@@ -48,13 +47,13 @@ function Quantity({ value, setValue, increment, decrement }) {
                 </IconButton>
             </Box>
 
-        </>
+        </ CssVarsProvider>
     );
 
 }
 
 export default function OrderList({cart_product}) {
-    const [value, setValue] = React.useState(cart_product.quantity.quantity.low * 1);
+    const [value, setValue] = React.useState(cart_product?.quantity?.quantity?.low * 1);
     function increment() {
         setValue(value + 1);
     }
@@ -76,14 +75,14 @@ export default function OrderList({cart_product}) {
             >
                 <AspectRatio ratio="1" sx={{ width: 90 }}>
                     <img
-                        src={cart_product.products.imgSrc}
+                        src={cart_product?.products?.imgSrc}
                         alt=""
                     />
                 </AspectRatio>
                 
                 <Box sx={{ ml: 0.5 }}>
                     <Typography level="h2" fontSize="lg" id="card-description" mb={0.5}>
-                        {cart_product.products.title}
+                        {cart_product?.products?.title}
                     </Typography>
 
                     {/* <Link
@@ -110,7 +109,7 @@ export default function OrderList({cart_product}) {
                         size="sm"
                         sx={{ pointerEvents: 'none' }}
                     >
-                        {cart_product.products.price}
+                        {cart_product?.products?.price}
                     </Chip>
                 </Box>
                

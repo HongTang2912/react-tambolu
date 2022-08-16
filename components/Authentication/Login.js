@@ -41,6 +41,7 @@ export default function Login() {
   const renderInput = () => {
     const username = window.localStorage.getItem("save-account") ?? "";
     usernameField.current.childNodes[0].value = username != "" ? jwt_decode(username)?.username : null;
+   
   };
 
   const saveToLocalStorage = (user, key) => {
@@ -62,17 +63,23 @@ export default function Login() {
       .then((res) => {
 
         saveToLocalStorage(res, 'login-user')
-
+       
         if (isSaveAccount) {
           saveToLocalStorage(res, 'save-account')
         }
 
         else
-          window.localStorage.removeItem("save-account");
-
+        window.localStorage.removeItem("save-account");
+        
         setValidate(res.password == passwordField.current.childNodes[0]?.value);
         if (res.password == passwordField.current.childNodes[0]?.value) {
           
+          dispatch({
+            type: 'user/login',
+            payload: {
+              username: res.username
+            }
+          })  
           location.replace('/')
         }
       })
@@ -84,7 +91,6 @@ export default function Login() {
   return (
     <>
       <CssVarsProvider>
-        {console.log(isValidated)}
         <div className="h-screen flex items-center">
           <Box
             sx={{ display: "flex", flexDirection: "column", gap: 2 }}

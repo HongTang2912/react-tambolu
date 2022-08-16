@@ -6,10 +6,10 @@ import Link from 'next/link'
 import { Pagination } from '@mui/material';
 import Image from 'next/image'
 import ReactPaginate from 'react-paginate';
-import {AddProductToCart} from '/public/store/ProductState'
+import { AddProductToCart, getQueryById } from '/public/store/ProductState'
 import MessageDialog from '../Dialog/MessageDialog'
 import jwt_decode from 'jwt-decode'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 function Items({ currentItems }) {
 
@@ -91,20 +91,31 @@ export default function PaginatedItems({ itemsPerPage, products }) {
 function Product({ product }) {
 
     const dispatch = useDispatch()
-
+    const username = useSelector(state => state?.user?.user?.username)
 
     const addCartProduct = async (id) => {
-        const user = window.localStorage.getItem('login-user') == undefined ||
-            window.localStorage.getItem('login-user') == ""
-            ? null : jwt_decode(window.localStorage.getItem('login-user'))
+      
+        if (username){
+            const prod = await AddProductToCart(id, username).then(res =>
+                res
+            )
+            dispatch({
+                type: 'cart/add-product',
+                payload: prod
+            })
+        }
+        else {
+            const cart = JSON.parse(window.localStorage.getItem('cart-products')) ?? []
 
-        const prod = await AddProductToCart(id, user?.username).then(res =>
-            res 
-        )
-        dispatch({
-            type: 'cart/add-product',
-            payload: prod
-        })
+            if (id) {
+                window.localStorage.setItem('cart-products', JSON.stringify([...cart, {products: id, quantity: 1}]))
+                dispatch({
+                    type: 'cart/add-product',
+                    payload: await getQueryById(id).then(res => res)
+                })
+                
+            }
+        }
 
     }
 

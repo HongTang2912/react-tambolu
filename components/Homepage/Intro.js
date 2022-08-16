@@ -11,18 +11,19 @@ export default function Intro() {
 
     const dispatch = useDispatch()
 
-    const getValue = () => {
-        const user = window.localStorage.getItem('login-user') == undefined || window.localStorage.getItem('login-user')  == ""
-        ? null : jwt_decode(window.localStorage.getItem('login-user'))
+    // const getValue = () => {
+    //     const user = window.localStorage.getItem('login-user') == undefined || 
+    //     window.localStorage.getItem('login-user')  == ""
+    //     ? null : jwt_decode(window.localStorage.getItem('login-user'))
 
-        dispatch({
-            type: "user/login",
-            payload: {
-                username: user?.username
-            }
+    //     dispatch({
+    //         type: "user/login",
+    //         payload: {
+    //             username: user?.username
+    //         }
             
-        })
-    }
+    //     })
+    // }
 
     const removeUser = () => {
         window.localStorage.setItem('login-user' ,"")
@@ -35,9 +36,9 @@ export default function Intro() {
         })
     }
 
-    React.useEffect(() => {
-        getValue()
-    },[useSelector(state => state?.user?.user?.username)])
+    // React.useEffect(() => {
+    //     getValue()
+    // },[useSelector(state => state?.user?.user?.username)])
     
     return (
         <div className={Styles.container}>

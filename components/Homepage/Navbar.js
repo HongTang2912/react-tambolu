@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TamboluLogo from "../Logo/Tambolu";
 import jwt_decode from 'jwt-decode'
-import { ViewProductsInCart } from '/public/store/ProductState'
+import { ViewProductsInCart, getQueryById } from '/public/store/ProductState'
 import { useDispatch, useSelector } from 'react-redux';
 
 const options = [
@@ -18,24 +18,23 @@ const options = [
 
 export default function Navbar() {
   const dispatch = useDispatch()
-  const [username, setUsername] = React.useState(null)
-  const [cartProducts, setCartProducts] = React.useState([])
+  const username = useSelector(state => state?.user?.user?.username)
+
   const [logoSize, setLogoSize] = React.useState({
     width: 100,
     height: 100,
   });
 
-  const getUsername = () => {
-    return window.localStorage.getItem('login-user') == undefined || window.localStorage.getItem('login-user') == ""
-      ? null : jwt_decode(window.localStorage.getItem('login-user'))
-  }
+  // const getUsername = () => {
+  //   return window.localStorage.getItem('login-user') == undefined ||
+  //   window.localStorage.getItem('login-user') == ""
+  //   ? null : jwt_decode(window.localStorage.getItem('login-user'))
+  // }
 
    const getCartProduct = async() => {
-        const user = window.localStorage.getItem('login-user') == undefined ||
-            window.localStorage.getItem('login-user') == ""
-            ? null : jwt_decode(window.localStorage.getItem('login-user'))
-
-        const prod = await ViewProductsInCart(user?.username).then(res => 
+       
+      if (username){
+        const prod = await ViewProductsInCart(username).then(res => 
             res ? res?.map(r => r[0]) : []
         )
         dispatch({
@@ -43,12 +42,32 @@ export default function Navbar() {
             payload: prod
         })
         
+      }
+      else {
+          const cart = JSON.parse(window.localStorage.getItem('cart-products')) ?? []
+
+          let prods = []
+          for (let i = 0; i < cart.length; i++) {
+              prods.push({
+                  products: await getQueryById(cart[i].products).then(res => res), 
+                  quantity: {
+                      quantity: {
+                          low: cart[i].quantity
+                      }
+                  }
+              })
+          }
+          dispatch({
+              type: 'cart/get-products',
+              payload: prods
+          })
+      }
     }
 
   React.useLayoutEffect(() => {
     getCartProduct()
-    setUsername(getUsername()?.username)
-  }, [])
+    console.log(username)
+  }, [username])
 
   
   return (
@@ -78,7 +97,7 @@ export default function Navbar() {
         </div>
 
         <div className={Styles.item_3} id="item-3">
-          <a href={`/cart/${username ? username : ''}`}>
+          <a href={`/cart`}>
             <FaCartArrowDown className={`${Styles.icon} ${Styles.cart_icon}`} />
             <span className={Styles.badge}>{useSelector(state => state.cart.product.length)}</span>
           </a>
