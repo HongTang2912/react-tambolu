@@ -9,7 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import PaginatedItems from '../components/Product/Product';
 import Footer from '../components/Footer/IntroduceInfo.js'
 import config from '/public/config.json'
-import {readData} from '/public/store/ProductState'
+import {readData, readDataBySearch} from '/public/store/ProductState'
 import {useSelector, useDispatch} from 'react-redux';
 
 
@@ -17,12 +17,7 @@ export default function Home() {
 
   
 
-  const [products, setProducts] = useState([]);
-  useEffect(() => {
-      readData().then(res => {setProducts(res)}) 
-      
-  }, [])
-
+  
 
   
   return (
@@ -41,7 +36,7 @@ export default function Home() {
         <Layout/>
         <div className="products-container">
          
-          <PaginatedItems itemsPerPage={20} products={products}/>
+          <PaginatedItems/>
           
         </div>
         <Footer/>

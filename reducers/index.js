@@ -2,11 +2,13 @@ import { combineReducers } from "redux";
 import loginReducer from "./login";
 import saveAccountReducer from "./saveAccount"
 import cartProductReducer from './cart_product'
+import paginateReducer from './paginate'
 
 const rootReducer = combineReducers({
   user: loginReducer,
   save_account: saveAccountReducer,
-  cart: cartProductReducer
+  cart: cartProductReducer,
+  paginator: paginateReducer
 });
 
 export default rootReducer;

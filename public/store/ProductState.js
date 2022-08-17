@@ -7,13 +7,17 @@ const PATH = config.NEO4J_DB_CONFIG.PATH;
 const USERNAME = config.NEO4J_DB_CONFIG.USERNAME;
 const PASSWORD = config.NEO4J_DB_CONFIG.PASSWORD;
 
-export async function readData(page) {
+
+export async function readDataBySearch(string) {
   const driver = neo4j.driver(PATH, neo4j.auth.basic(USERNAME, PASSWORD));
   const session = driver.session();
   let data = [];
   try {
     const result = await session.run(
-      `match (n:Product) WITH n LIMIT 100 return n`
+      `match (n:Product) where n.title contains $string return n`,
+      {
+        string: string
+      }
     );
     const records = result.records;
     records.forEach(async (rec) => {
@@ -31,6 +35,37 @@ export async function readData(page) {
   await driver.close();
   return data;
 }
+
+export async function readData(page, limit) {
+  const driver = neo4j.driver(PATH, neo4j.auth.basic(USERNAME, PASSWORD));
+  const session = driver.session();
+  let data = [];
+  try {
+    const result = await session.run(
+      `match (n: Product ) with n skip tointeger($skip) limit tointeger($limit) return n`,
+      {
+        skip: page*20,
+        limit: limit
+      }
+    );
+    const records = result.records;
+    records.forEach(async (rec) => {
+      await data.push({...rec.get(0).properties, product_id: rec._fields[0]?.identity?.low});
+    });
+
+    // await console.log(data);
+  } catch (err) {
+    await console.error(err);
+  } finally {
+    await session.close();
+  }
+
+  // on application exit:
+  await driver.close();
+  return data;
+}
+
+
 
 export const getQueryById = async (pd_id) => {
   const driver = neo4j.driver(PATH, neo4j.auth.basic(USERNAME, PASSWORD));

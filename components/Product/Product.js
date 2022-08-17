@@ -4,14 +4,21 @@ import { animated, useSpring } from 'react-spring'
 import Button from '@mui/material/Button';
 import Link from 'next/link'
 import { Pagination } from '@mui/material';
-import Image from 'next/image'
-import ReactPaginate from 'react-paginate';
-import { AddProductToCart, getQueryById } from '/public/store/ProductState'
-import MessageDialog from '../Dialog/MessageDialog'
-import jwt_decode from 'jwt-decode'
+;
+import { AddProductToCart, getQueryById, readData } from '/public/store/ProductState'
+
 import {useDispatch, useSelector} from 'react-redux'
 
-function Items({ currentItems }) {
+function Items() {
+
+    const page = useSelector(state => state.paginator.page)
+    const [currentItems, setCurrentItems] = useState(null)
+
+    React.useEffect(() => {
+        readData(page, 20).then(res => setCurrentItems(res))
+        console.log(page);
+        console.log(currentItems)
+    },[page ])
 
     return (
         <>
@@ -28,55 +35,58 @@ function Items({ currentItems }) {
     );
 }
 
-export default function PaginatedItems({ itemsPerPage, products }) {
+export default function PaginatedItems() {
     // We start with an empty list of items.
-    const [currentItems, setCurrentItems] = useState(null);
-    const [pageCount, setPageCount] = useState(0);
+    const dispatch = useDispatch()
+    const page = useSelector(state => state.paginator.page)
+    const currentItemsLength = 1000
 
-    // Here we use item offsets; we could also use page offsets
-    // following the API or data you're working with.
-    const [itemOffset, setItemOffset] = useState(0);
+    // useEffect(() => {
+    //     const endOffset = paginator.item_offset + itemsPerPage;
+    //     dispatch({
+    //         type: 'paginate/goto',
+    //         payload: {
+    //             item_offset: 0,
+    //         }
+    //     })
 
-
-    useEffect(() => {
-
-        const endOffset = itemOffset + itemsPerPage;
-        // console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-        setCurrentItems(products.slice(itemOffset, endOffset));
-        setPageCount(Math.ceil(products.length / itemsPerPage));
-    }, [itemOffset, itemsPerPage, products]);
+    // }, [item_offset, itemsPerPage, products]);
 
     // Invoke when user click to request another page.
 
     const getPageValue = (type, page, selected) => {
         if (selected == true) {
 
-            let newOffset = (page * itemsPerPage) % products.length;
-            setItemOffset(newOffset);       
+            // let newOffset = (page * itemsPerPage) % products.length;
+            // dispatch({
+            //     type: 'paginate/goto',
+            //     payload: {
+            //         item_offset: newOffset,
+            //         current_items: products.slice(paginator.item_offset, newOffset),
+            //         page_count: Math.ceil(products.length / itemsPerPage)
+            //     }
+            // })
+            dispatch({
+                type: 'paginate/goto',
+                payload: {
+                    page: page
+                }
+            })
         }
     }
 
     
     return (
         <>
-            {currentItems?.length != 0
-                ? <Items currentItems={currentItems} />
-                : <h1>Không có dữ liệu</h1>}
+           {/* <Items currentItems={paginator.current_items} /> */}
+           <Items/>
+   
             <div className="w-full flex justify-center">
-
-                {/* <ReactPaginate
-                    className={`mx-auto ${Styles.paginateBar}`}
-                    breakLabel="..."
-                    nextLabel="Trang sau"
-                    previousLabel="Trang trước"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    pageCount={pageCount}
-                    renderOnZeroPageCount={null}
-                /> */}
+                
+                
                 <Pagination
                     color="primary"
-                    count={pageCount}
+                    count={currentItemsLength/20}
                     //onChange={(e) => handlePageClick(e)}
                     getItemAriaLabel={(type, page, selected) => getPageValue(type, page, selected)}
                     siblingCount={5}
