@@ -1,9 +1,7 @@
 
 
 const initialState = {
-    page: 0,
-    
-
+    nodes: []
 }
 
 const paginateReducer = (state = initialState, action) => {

@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TamboluLogo from "../Logo/Tambolu";
 import jwt_decode from 'jwt-decode'
-import { ViewProductsInCart, getQueryById } from '/public/store/ProductState'
+import { ViewProductsInCart, getQueryById, readDataBySearch } from '/public/store/ProductState'
 import { useDispatch, useSelector } from 'react-redux';
 
 const options = [
@@ -19,19 +19,23 @@ const options = [
 export default function Navbar() {
   const dispatch = useDispatch()
   const username = useSelector(state => state?.user?.user?.username)
+  const [searchValue, setSearchValue] = React.useState("")
 
   const [logoSize, setLogoSize] = React.useState({
     width: 100,
     height: 100,
   });
 
-  // const getUsername = () => {
-  //   return window.localStorage.getItem('login-user') == undefined ||
-  //   window.localStorage.getItem('login-user') == ""
-  //   ? null : jwt_decode(window.localStorage.getItem('login-user'))
-  // }
+  const handleSearchValue = async(string) => [
+    dispatch({
+      type: "paginate/goto",
+      payload: {
+        nodes: await readDataBySearch(string).then(res => res)
+      }
+    })
+  ]
 
-   const getCartProduct = async() => {
+  const getCartProduct = async() => {
        
       if (username){
         const prod = await ViewProductsInCart(username).then(res => 
@@ -87,10 +91,11 @@ export default function Navbar() {
               options={options}
               sx={{ width: 300 }}
               renderInput={(params) => (
-                <TextField {...params} label="Sản phẩm" />
+                <TextField {...params} label="Sản phẩm" 
+                onChange={(e) => {setSearchValue(e.target.value)}}/>
               )}
             />
-            <Button variant="outlined" disabled>
+            <Button variant="outlined" disabled={false} onClick={() => handleSearchValue(searchValue)}>
               Tìm kiếm
             </Button>
           </Stack>

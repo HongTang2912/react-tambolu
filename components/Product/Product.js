@@ -11,21 +11,14 @@ import {useDispatch, useSelector} from 'react-redux'
 
 function Items() {
 
-    const page = useSelector(state => state.paginator.page)
-    const [currentItems, setCurrentItems] = useState(null)
-
-    React.useEffect(() => {
-        readData(page, 20).then(res => setCurrentItems(res))
-        console.log(page);
-        console.log(currentItems)
-    },[page ])
+    
 
     return (
         <>
             {
-                currentItems ?
+                useSelector(state => state.paginator.nodes) ?
 
-                    currentItems.map((item, index) => (
+                    useSelector(state => state.paginator.nodes)?.map((item, index) => (
                         <div key={index}><Product product={item} /></div>
                     ))
                     :
@@ -38,38 +31,18 @@ function Items() {
 export default function PaginatedItems() {
     // We start with an empty list of items.
     const dispatch = useDispatch()
-    const page = useSelector(state => state.paginator.page)
+    // const page = useSelector(state => state.paginator.page)
     const currentItemsLength = 1000
+ 
 
-    // useEffect(() => {
-    //     const endOffset = paginator.item_offset + itemsPerPage;
-    //     dispatch({
-    //         type: 'paginate/goto',
-    //         payload: {
-    //             item_offset: 0,
-    //         }
-    //     })
 
-    // }, [item_offset, itemsPerPage, products]);
-
-    // Invoke when user click to request another page.
-
-    const getPageValue = (type, page, selected) => {
+    const getPageValue = async(type, page, selected) => {
         if (selected == true) {
 
-            // let newOffset = (page * itemsPerPage) % products.length;
-            // dispatch({
-            //     type: 'paginate/goto',
-            //     payload: {
-            //         item_offset: newOffset,
-            //         current_items: products.slice(paginator.item_offset, newOffset),
-            //         page_count: Math.ceil(products.length / itemsPerPage)
-            //     }
-            // })
             dispatch({
                 type: 'paginate/goto',
                 payload: {
-                    page: page
+                    nodes: await readData(page, 20).then(res => res)
                 }
             })
         }

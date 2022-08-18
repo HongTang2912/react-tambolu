@@ -44,7 +44,7 @@ export async function readData(page, limit) {
     const result = await session.run(
       `match (n: Product ) with n skip tointeger($skip) limit tointeger($limit) return n`,
       {
-        skip: page*20,
+        skip: (page-1)*20,
         limit: limit
       }
     );
