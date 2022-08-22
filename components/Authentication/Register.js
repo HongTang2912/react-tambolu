@@ -13,8 +13,11 @@ import jwt_encode from "jwt-encode";
 import Checkbox from "@mui/joy/Checkbox";
 import ErrorsList from './Errors'
 import {RegisterUser, loginUser} from '/public/store/ProductState'
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function Register() {
+  const dispatch = useDispatch();
+
   const [radius, setRadius] = React.useState(16);
   const [childHeight, setChildHeight] = React.useState(32);
 
