@@ -148,7 +148,7 @@ export default function Register() {
         dispatch({
           type: 'user/login',
           payload: {
-            username: res.username
+            username: getValue(2)
           }
         })  
 
