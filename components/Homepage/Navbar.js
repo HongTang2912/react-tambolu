@@ -28,10 +28,8 @@ export default function Navbar() {
 
   const handleSearchValue = async(string) => [
     dispatch({
-      type: "paginate/goto",
-      payload: {
-        nodes: await readDataBySearch(string).then(res => res)
-      }
+      type: "paginate/goto-search",
+      payload: string
     })
   ]
 

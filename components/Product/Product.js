@@ -7,11 +7,11 @@ import { Pagination } from '@mui/material';
 ;
 import { AddProductToCart, getQueryById, readData } from '/public/store/ProductState'
 
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 function Items() {
 
-    
+
 
     return (
         <>
@@ -33,37 +33,51 @@ export default function PaginatedItems() {
     const dispatch = useDispatch()
     // const page = useSelector(state => state.paginator.page)
     const currentItemsLength = 1000
- 
 
 
-    const getPageValue = async(type, page, selected) => {
+
+    const getPageValue = async (type, page, selected) => {
         if (selected == true) {
-
-            dispatch({
-                type: 'paginate/goto',
-                payload: {
-                    nodes: await readData(page, 20).then(res => res)
-                }
-            })
+            if (useSelector(state => state?.paginator?.search) != "") {
+                dispatch({
+                    type: 'paginate/goto',
+                    payload: {
+                        nodes: await readData(page, 20).then(res => res)
+                    }
+                })
+            }
+            else {
+                dispatch({
+                    type: 'paginate/goto',
+                    payload: {
+                        search: useSelector(state => state?.paginator?.search),
+                        nodes: await readDataBySearch(
+                            useSelector(state => state?.paginator?.search),
+                            page,
+                            20)
+                            .then(res => res)
+                    }
+                })
+            }
         }
     }
 
-    
+
     return (
         <>
-           {/* <Items currentItems={paginator.current_items} /> */}
-           <Items/>
-   
+            {/* <Items currentItems={paginator.current_items} /> */}
+            <Items />
+
             <div className="w-full flex justify-center">
-                
-                
+
+
                 <Pagination
                     color="primary"
-                    count={currentItemsLength/20}
+                    count={currentItemsLength / 20}
                     //onChange={(e) => handlePageClick(e)}
                     getItemAriaLabel={(type, page, selected) => getPageValue(type, page, selected)}
                     siblingCount={5}
-                    />
+                />
             </div>
         </>
     );
@@ -77,8 +91,8 @@ function Product({ product }) {
     const username = useSelector(state => state?.user?.user?.username)
 
     const addCartProduct = async (id) => {
-      
-        if (username){
+
+        if (username) {
             const prod = await AddProductToCart(id, username).then(res =>
                 res
             )
@@ -91,26 +105,26 @@ function Product({ product }) {
             const cart = JSON.parse(window.localStorage.getItem('cart-products')) ?? []
 
             if (id) {
-                window.localStorage.setItem('cart-products', JSON.stringify([...cart, {products: id, quantity: 1}]))
+                window.localStorage.setItem('cart-products', JSON.stringify([...cart, { products: id, quantity: 1 }]))
                 dispatch({
                     type: 'cart/add-product',
                     payload: await getQueryById(id).then(res => res)
                 })
-                
+
             }
         }
 
     }
 
     const styles = useSpring({
-        
+
         to: [
             { opacity: 0.05 },
             { opacity: 1 },
         ],
         from: { opacity: 0 },
     })
-    
+
 
 
     return (
@@ -146,8 +160,8 @@ function Product({ product }) {
                     </a>
                 </Link>
                 <hr />
-                <Button 
-                    variant={product.state == "out-of-stock" ? "disabled" : "outlined"} 
+                <Button
+                    variant={product.state == "out-of-stock" ? "disabled" : "outlined"}
                     className={Styles.button_addCart}
                     onClick={() => addCartProduct(product.product_id)}
                 >

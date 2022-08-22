@@ -8,14 +8,18 @@ const USERNAME = config.NEO4J_DB_CONFIG.USERNAME;
 const PASSWORD = config.NEO4J_DB_CONFIG.PASSWORD;
 
 
-export async function readDataBySearch(string) {
+export async function readDataBySearch( string, page, limit ) {
   const driver = neo4j.driver(PATH, neo4j.auth.basic(USERNAME, PASSWORD));
   const session = driver.session();
   let data = [];
   try {
     const result = await session.run(
-      `match (n:Product) where n.title contains $string return n`,
+      `match (n:Product) 
+      with n skip tointeger($skip) limit tointeger($limit)
+      where n.title contains $string return n`,
       {
+        skip: (page-1)*20,
+        limit: limit,
         string: string
       }
     );
