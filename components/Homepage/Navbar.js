@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TamboluLogo from "../Logo/Tambolu";
 import jwt_decode from 'jwt-decode'
-import { ViewProductsInCart, getQueryById, readDataBySearch } from '/public/store/ProductState'
+import { ViewProductsInCart, getQueryById } from '/public/store/ProductState'
 import { useDispatch, useSelector } from 'react-redux';
 
 const options = [
@@ -28,7 +28,7 @@ export default function Navbar() {
 
   const handleSearchValue = async(string) => [
     dispatch({
-      type: "paginate/goto-search",
+      type: "search",
       payload: string
     })
   ]

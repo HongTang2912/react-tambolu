@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import Link from 'next/link'
 import { Pagination } from '@mui/material';
 ;
-import { AddProductToCart, getQueryById, readData } from '/public/store/ProductState'
+import { AddProductToCart, getQueryById, readData, readDataBySearch } from '/public/store/ProductState'
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -31,31 +31,36 @@ function Items() {
 export default function PaginatedItems() {
     // We start with an empty list of items.
     const dispatch = useDispatch()
-    // const page = useSelector(state => state.paginator.page)
-    const currentItemsLength = 1000
+    const search = useSelector(state => state?.search?.product) 
 
+    const currentItemsLength = useSelector(state => state?.paginator?.prod_length)
+    const pageLength = 20
+    const pageCount = Math.ceil(currentItemsLength / pageLength)
 
 
     const getPageValue = async (type, page, selected) => {
         if (selected == true) {
-            if (useSelector(state => state?.paginator?.search) != "") {
+            if (search == null) {
+                
                 dispatch({
                     type: 'paginate/goto',
                     payload: {
-                        nodes: await readData(page, 20).then(res => res)
+                        prod_length: await readData(page, 20)
+                        .then(res => res.quantity),
+                        nodes: await readData(page, 20)
+                        .then(res => res.data)
                     }
                 })
             }
             else {
+                page = 1
                 dispatch({
                     type: 'paginate/goto',
                     payload: {
-                        search: useSelector(state => state?.paginator?.search),
-                        nodes: await readDataBySearch(
-                            useSelector(state => state?.paginator?.search),
-                            page,
-                            20)
-                            .then(res => res)
+                        prod_length: await readDataBySearch(search, page, 20)
+                        .then(res => res.quantity),
+                        nodes: await readDataBySearch(search, page, 20)
+                        .then(res => res.data)
                     }
                 })
             }
@@ -73,7 +78,7 @@ export default function PaginatedItems() {
 
                 <Pagination
                     color="primary"
-                    count={currentItemsLength / 20}
+                    count={pageCount}
                     //onChange={(e) => handlePageClick(e)}
                     getItemAriaLabel={(type, page, selected) => getPageValue(type, page, selected)}
                     siblingCount={5}

@@ -13,6 +13,15 @@ export async function readDataBySearch( string, page, limit ) {
   const session = driver.session();
   let data = [];
   try {
+    const prodLength = await session.run(
+      `match (n:Product) 
+      where n.title contains $string
+      return count(n)`,
+      {
+        string: string
+      }
+    );
+
     const result = await session.run(
       `match (n:Product) where n.title contains $string
       with n skip tointeger($skip) limit tointeger($limit)
@@ -28,6 +37,10 @@ export async function readDataBySearch( string, page, limit ) {
       await data.push({...rec.get(0).properties, product_id: rec._fields[0]?.identity?.low});
     });
 
+    return {
+      quantity: prodLength.records[0].get(0).low,
+      data: data
+    };
     // await console.log(data);
   } catch (err) {
     await console.error(err);
@@ -37,7 +50,6 @@ export async function readDataBySearch( string, page, limit ) {
 
   // on application exit:
   await driver.close();
-  return data;
 }
 
 export async function readData(page, limit) {
@@ -45,6 +57,10 @@ export async function readData(page, limit) {
   const session = driver.session();
   let data = [];
   try {
+    const prodLength = await session.run(
+      `match (n:Product) return count(n)`,
+    );
+
     const result = await session.run(
       `match (n: Product ) with n skip tointeger($skip) limit tointeger($limit) return n`,
       {
@@ -57,6 +73,10 @@ export async function readData(page, limit) {
       await data.push({...rec.get(0).properties, product_id: rec._fields[0]?.identity?.low});
     });
 
+    return {
+      quantity: prodLength.records[0].get(0).low,
+      data: data
+    };
     // await console.log(data);
   } catch (err) {
     await console.error(err);
@@ -66,7 +86,6 @@ export async function readData(page, limit) {
 
   // on application exit:
   await driver.close();
-  return data;
 }
 
 

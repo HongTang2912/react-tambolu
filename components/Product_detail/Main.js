@@ -16,9 +16,8 @@ import {
   Box,
   LinearProgress,
 } from "@mui/material";
-
 import jwt_decode from "jwt-decode"
-import { VisibilityOff, Visibility, SendIcon } from "@mui/icons-material";
+import { VisibilityOff, Visibility } from "@mui/icons-material";
 import { createComment } from "/public/store/ProductState";
 
 export default function ProductDetail({ product, comment_block }) {
@@ -40,15 +39,15 @@ export default function ProductDetail({ product, comment_block }) {
   const AvgRatingPoint = () => {
     return (
       FilterRatingPoint()?.reduce((sum, i, index) => {
-        return sum + i * (index+1);
+        return sum + i * (index + 1);
       }, 0) / FilterRatingPoint()?.reduce((sum, i) => sum + i, 0)
     ) || 0;
   };
 
   const FilterRatingPoint = () => {
-    let rating = [0,0,0,0,0]
+    let rating = [0, 0, 0, 0, 0]
     comment_block?.map((block) => {
-      rating[block.comment.properties.rating_point-1] += 1;
+      rating[block.comment.properties.rating_point - 1] += 1;
     })
     return rating
   }
@@ -67,11 +66,11 @@ export default function ProductDetail({ product, comment_block }) {
 
   const getValue = () => {
     return window.localStorage.getItem('login-user') == "" ? null : jwt_decode(window.localStorage.getItem('login-user'))
-}
+  }
 
   const handleClickSubmit = () => {
     createComment({
-      rating_point: point*1,
+      rating_point: point * 1,
       content: comment,
       time: new Date()
     }, getValue().username, product?.product_id);
@@ -157,6 +156,8 @@ export default function ProductDetail({ product, comment_block }) {
           </animated.div>
         </div>
       </div>
+
+
       <Box
         sx={{
           width: "100%",
@@ -265,7 +266,7 @@ export default function ProductDetail({ product, comment_block }) {
               </div>
             </RadioGroup>
           </FormControl>
-          <FormControl className="flex flex-row items-center">
+          <Box className="flex flex-row items-center">
             <div className="text-yellow-700 px-3">
               <h1 className="font-bold md:text-6xl text-5xl inline">
                 {AvgRatingPoint().toFixed(1)}
@@ -274,6 +275,7 @@ export default function ProductDetail({ product, comment_block }) {
                 ({FilterRatingPoint()?.reduce((sum, i) => sum + i)})
               </h1>
             </div>
+
             <div className="w-64 py-3">
               <LinearProgress
                 className="py-2 my-2"
@@ -313,7 +315,7 @@ export default function ProductDetail({ product, comment_block }) {
               <p>{FilterRatingPoint()[3]}</p>
               <p>{FilterRatingPoint()[4]}</p>
             </div>
-          </FormControl>
+          </Box>
         </div>
         <Button variant="contained" onClick={handleClickSubmit}>
           Send
