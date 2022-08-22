@@ -9,13 +9,8 @@ const paginateReducer = (state = initialState, action) => {
         case 'paginate/goto': {
             return action.payload
         }
-        case 'paginate/goto-search': {
-            return {
-                ...state,
-                search: action.payload
-            }
-        }   
-        
+       
+
         default: return state;
     }
 }

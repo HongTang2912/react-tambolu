@@ -14,9 +14,9 @@ export async function readDataBySearch( string, page, limit ) {
   let data = [];
   try {
     const result = await session.run(
-      `match (n:Product) 
+      `match (n:Product) where n.title contains $string
       with n skip tointeger($skip) limit tointeger($limit)
-      where n.title contains $string return n`,
+       return n`,
       {
         skip: (page-1)*20,
         limit: limit,

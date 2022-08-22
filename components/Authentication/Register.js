@@ -144,7 +144,14 @@ export default function Register() {
   
           
         
-        console.log(res)
+         
+        dispatch({
+          type: 'user/login',
+          payload: {
+            username: res.username
+          }
+        })  
+
         location.replace("/")
       }
     })
