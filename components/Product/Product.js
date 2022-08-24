@@ -4,7 +4,7 @@ import { animated, useSpring } from 'react-spring'
 import Button from '@mui/material/Button';
 import Link from 'next/link'
 import { Pagination } from '@mui/material';
-;
+
 import { AddProductToCart, getQueryById, readData, readDataBySearch } from '/public/store/ProductState'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -31,7 +31,7 @@ function Items() {
 export default function PaginatedItems() {
     // We start with an empty list of items.
     const dispatch = useDispatch()
-    const search = useSelector(state => state?.search?.product) 
+    const search = useSelector(state => state?.search?.product)
 
     const currentItemsLength = useSelector(state => state?.paginator?.prod_length)
     const pageLength = 20
@@ -41,14 +41,14 @@ export default function PaginatedItems() {
     const getPageValue = async (type, page, selected) => {
         if (selected == true) {
             if (search == null) {
-                
+
                 dispatch({
                     type: 'paginate/goto',
                     payload: {
                         prod_length: await readData(page, 20)
-                        .then(res => res.quantity),
+                            .then(res => res.quantity),
                         nodes: await readData(page, 20)
-                        .then(res => res.data)
+                            .then(res => res.data)
                     }
                 })
             }
@@ -57,9 +57,9 @@ export default function PaginatedItems() {
                     type: 'paginate/goto',
                     payload: {
                         prod_length: await readDataBySearch(search, page, 20)
-                        .then(res => res.quantity),
+                            .then(res => res.quantity),
                         nodes: await readDataBySearch(search, page, 20)
-                        .then(res => res.data)
+                            .then(res => res.data)
                     }
                 })
             }

@@ -84,6 +84,6 @@
 
 @media screen and (max-width: 465px) {
     .post {
-        width: 46%;
+        width: 180px;
     }
 } 
