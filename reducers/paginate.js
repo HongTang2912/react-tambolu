@@ -1,6 +1,7 @@
 
 
 const initialState = {
+    search: null,
     nodes: []
 }
 
@@ -9,7 +10,7 @@ const paginateReducer = (state = initialState, action) => {
         case 'paginate/goto': {
             return action.payload
         }
-       
+
 
         default: return state;
     }
