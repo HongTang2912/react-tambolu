@@ -33,12 +33,13 @@ export default function PaginatedItems() {
     const dispatch = useDispatch()
     const search = useSelector(state => state?.search?.product)
 
-    const currentItemsLength = useSelector(state => state?.paginator?.prod_length)
+    const currentItemsLength = useSelector(state => state?.paginator?.prod_length) ?? 100
     const pageLength = 20
     const pageCount = Math.ceil(currentItemsLength / pageLength)
 
 
     const getPageValue = async (type, page, selected) => {
+        console.log(currentItemsLength)
         if (selected == true) {
             if (search == null) {
 

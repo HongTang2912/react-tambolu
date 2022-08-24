@@ -1,6 +1,7 @@
 
 
 const initialState = {
+    prod_length: null,
     nodes: []
 }
 
