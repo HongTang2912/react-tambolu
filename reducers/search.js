@@ -1,7 +1,7 @@
 
 
 const initialState = {
-    product: ""
+    product: null
 }
 
 const searchReducer = (state = initialState, action) => {

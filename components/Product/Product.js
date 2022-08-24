@@ -53,7 +53,6 @@ export default function PaginatedItems() {
                 })
             }
             else {
-                page = 1
                 dispatch({
                     type: 'paginate/goto',
                     payload: {
