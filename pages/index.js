@@ -15,11 +15,6 @@ import {useSelector, useDispatch} from 'react-redux';
 
 export default function Home() {
 
-  
-
-  
-
-  
   return (
     <div className={styles.container}>
       <Head>

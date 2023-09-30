@@ -5,12 +5,14 @@
   "engines": {
     "node": "16.x"
   },
+  "type": "module",
   "scripts": {
     "dev": "next",
     "build": "next build",
     "start": "next start -p $PORT"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.4",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@mui/icons-material": "^5.8.4",
@@ -19,6 +21,7 @@
     "@mui/styled-engine-sc": "^5.10.0",
     "@mui/system": "^5.10.0",
     "axios": "^0.27.2",
+    "graphql": "^16.8.1",
     "jwt-decode": "^3.1.2",
     "jwt-encode": "^1.0.1",
     "material-ui-popup-state": "^4.0.1",

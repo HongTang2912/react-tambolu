@@ -16,6 +16,10 @@ body {
   --third-color: rgb(143, 237, 174);
   --global-background: rgb(242, 242, 242);
   --card-background: rgb(240, 240, 240);
+  --main-color1: rgb(80 34 174);
+  --main-color2: rgb(103 56 195);
+  --main-color3: rgb(0 170 255);
+  --main-color4: rgb(53 187 255); 
   background: var(--global-background);
 }
 

@@ -43,15 +43,15 @@ export default function PaginatedItems() {
         if (selected == true) {
             if (search == null) {
 
-                dispatch({
-                    type: 'paginate/goto',
-                    payload: {
-                        prod_length: await readData(page, 20)
-                            .then(res => res.quantity),
-                        nodes: await readData(page, 20)
-                            .then(res => res.data)
-                    }
-                })
+                // dispatch({
+                //     type: 'paginate/goto',
+                //     payload: {
+                //         prod_length: await readData(page, "20")
+                //             .then(res => res.quantity),
+                //         nodes: await readData(page, "20")
+                //             .then(res => res.data)
+                //     }
+                // })
             }
             else {
                 dispatch({
