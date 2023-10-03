@@ -13,17 +13,17 @@ import MessageDialog from "../Dialog/MessageDialog";
 import Checkbox from "@mui/joy/Checkbox";
 import jwt_decode from "jwt-decode";
 import jwt_encode from "jwt-encode";
-import { useSelector, useDispatch } from 'react-redux';
-import ErrorsList from './Errors'
+import { useSelector, useDispatch } from "react-redux";
+import ErrorsList from "./Errors";
 
 export default function Login() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [radius, setRadius] = React.useState(16);
   const [childHeight, setChildHeight] = React.useState(32);
   const [isVisible, setVisible] = React.useState(false);
   const [isSaveAccount, setSaveAccount] = React.useState(false);
-  const [isValidated, setValidate] = React.useState(true)
+  const [isValidated, setValidate] = React.useState(true);
 
   const usernameField = React.useRef();
   const passwordField = React.useRef();
@@ -35,13 +35,12 @@ export default function Login() {
 
   React.useEffect(() => {
     renderInput();
-
   }, []);
 
   const renderInput = () => {
-    const username = window.localStorage.getItem("save-account") ?? "";
-    usernameField.current.childNodes[0].value = username != "" ? jwt_decode(username)?.username : null;
-   
+    const username = window.localStorage?.getItem("save-account") ?? "";
+    usernameField.current.childNodes[0].value =
+      username != "" ? jwt_decode(username)?.username : null;
   };
 
   const saveToLocalStorage = (user, key) => {
@@ -51,36 +50,31 @@ export default function Login() {
         {
           username: user?.username,
           email: user?.email,
-          phone_number: user?.phone_number
+          phone_number: user?.phone_number,
         },
         "tambolu"
       )
-    )
-  }
+    );
+  };
 
   const getValues = () => {
     loginUser(usernameField.current.childNodes[0].value)
       .then((res) => {
+        saveToLocalStorage(res, "login-user");
 
-        saveToLocalStorage(res, 'login-user')
-       
         if (isSaveAccount) {
-          saveToLocalStorage(res, 'save-account')
-        }
+          saveToLocalStorage(res, "save-account");
+        } else window.localStorage.removeItem("save-account");
 
-        else
-        window.localStorage.removeItem("save-account");
-        
         setValidate(res.password == passwordField.current.childNodes[0]?.value);
         if (res.password == passwordField.current.childNodes[0]?.value) {
-          
           dispatch({
-            type: 'user/login',
+            type: "user/login",
             payload: {
-              username: res.username
-            }
-          })  
-          location.replace('/')
+              username: res.username,
+            },
+          });
+          location.replace("/");
         }
       })
       .catch((err) => {
@@ -164,11 +158,12 @@ export default function Login() {
               }}
             >
               Đăng nhập
-
             </Button>
-            <ErrorsList 
-              clicked={true} 
-              error_list={isValidated ? [] : ["Sai tên đăng nhập hoặc mật khẩu"]}
+            <ErrorsList
+              clicked={true}
+              error_list={
+                isValidated ? [] : ["Sai tên đăng nhập hoặc mật khẩu"]
+              }
             />
             <small
               className={`username-label text-right ${Styles["Montserrat-font"]}`}
@@ -181,7 +176,6 @@ export default function Login() {
           </Box>
         </div>
       </CssVarsProvider>
-
     </>
   );
 }

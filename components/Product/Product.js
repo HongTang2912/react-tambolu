@@ -42,28 +42,29 @@ export default function PaginatedItems() {
         console.log(currentItemsLength)
         if (selected == true) {
             if (search == null) {
+                const current = await readData(page, pageLength).then(
+                  (res) => res
+                );
 
-                // dispatch({
-                //     type: 'paginate/goto',
-                //     payload: {
-                //         prod_length: await readData(page, "20")
-                //             .then(res => res.quantity),
-                //         nodes: await readData(page, "20")
-                //             .then(res => res.data)
-                //     }
-                // })
-            }
-            else {
                 dispatch({
-                    type: 'paginate/goto',
-                    payload: {
-                        prod_length: await readDataBySearch(search, page, 20)
-                            .then(res => res.quantity),
-                        nodes: await readDataBySearch(search, page, 20)
-                            .then(res => res.data)
-                    }
-                })
+                  type: "paginate/goto",
+                  payload: {
+                    prod_length: current.quantity,
+                    nodes: current.data,
+                  },
+                });
             }
+            // else {
+            //     dispatch({
+            //         type: 'paginate/goto',
+            //         payload: {
+            //             prod_length: await readDataBySearch(search, page, 20)
+            //                 .then(res => res.quantity),
+            //             nodes: await readDataBySearch(search, page, 20)
+            //                 .then(res => res.data)
+            //         }
+            //     })
+            // }
         }
     }
 
@@ -107,7 +108,7 @@ function Product({ product }) {
             })
         }
         else {
-            const cart = JSON.parse(window.localStorage.getItem('cart-products')) ?? []
+            const cart = JSON.parse(window.localStorage?.getItem('cart-products')) ?? []
 
             if (id) {
                 window.localStorage.setItem('cart-products', JSON.stringify([...cart, { products: id, quantity: 1 }]))

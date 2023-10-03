@@ -46,7 +46,7 @@ export default function Navbar() {
         
       }
       else {
-          const cart = JSON.parse(window.localStorage.getItem('cart-products')) ?? []
+          const cart = JSON.parse(window.localStorage?.getItem('cart-products')) ?? []
 
           let prods = []
           for (let i = 0; i < cart.length; i++) {

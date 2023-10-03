@@ -1,44 +1,55 @@
-import pkg from "@apollo/client";
-const { ApolloClient, InMemoryCache } = pkg;
-import pkg2 from "@apollo/client";
-const { gql } = pkg;
+import graphql from "graphql-client";
 
-const createApolloClient = () => {
-  return new ApolloClient({
-    uri: "http://localhost:4000",
-    cache: new InMemoryCache(),
-  });
-};
+const client = graphql({
+  url: "http://localhost:4000",
+  headers: {
+    "Access-Control-Allow-Origin": true,
+  },
+});
 
-// console.log(session);
+export async function readData(offset, limit) {
 
-export async function readDataBySearch(string, page, limit) {}
-
-export async function readData(page, limit) {
-  const client = createApolloClient();
-  const { data } = await client.query({
-    query: gql`
-      query Query($options: ProductOptions) {
-        products(options: $options) {
-          image_url
-          category {
-            name
+  var variables = {
+    options: {
+      limit,
+      offset,
+    },
+  };
+  
+   return client
+    .query(
+      `
+    query Query($options: ProductOptions) {
+      products(options: $options) {
+            image_url
+            category {
+              name
+            }
           }
+        }`,
+      variables,
+      function (req, res) {
+        if (res.status === 401) {
+          throw new Error("Not authorized");
         }
       }
-    `,
-    variables: {
-      options: {
-        limit: limit,
-        offset: page,
-      },
-    },
-  });
-  return data;
+    )
+    .then(function (body) {
+      return ({
+        data: body.data,
+        quantity: body.data.length,
+      });
+    })
+    .catch(function (err) {
+      return ({
+        message: err.message
+      });
+    });
+   
 }
 
 
-
+export async function readDataBySearch(string, page, limit) {}
 export const getQueryById = async (pd_id) => {};
 
 export const getCommentById = async (ids) => {};

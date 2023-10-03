@@ -65,7 +65,7 @@ export default function ProductDetail({ product, comment_block }) {
   };
 
   const getValue = () => {
-    return window.localStorage.getItem('login-user') == "" ? null : jwt_decode(window.localStorage.getItem('login-user'))
+    return window.localStorage?.getItem('login-user') == "" ? null : jwt_decode(window.localStorage?.getItem('login-user'))
   }
 
   const handleClickSubmit = () => {
